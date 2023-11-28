@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core"
+   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:p="http://primefaces.org/ui">
+<h:head>
+   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+   <title>Form by Vítor Célio</title>
+   <h:outputScript library="primefaces" name="jquery/jquery.js" />
+   <link href="/javax.faces.resource/theme.css.jspx?ln=primefaces-aristo" rel="stylesheet" type="text/css" />
+   <link href="/javax.faces.resource/primefaces.css.jspx?ln=primefaces" rel="stylesheet" type="text/css" />
+   <link href="/javax.faces.resource/colorpicker/colorpicker.css.jspx?ln=primefaces" rel="stylesheet" type="text/css" />
+   <link rel="preconnect" href="https://fonts.googleapis.com" />
+   <link rel="preconnect" href="https://fonts.gstatic.com" />
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800" rel="stylesheet" />
+   <h:outputStylesheet library="css" name="form.css" />
+</h:head>
+<h:body>
+
+   <h:form id="frm">
+      <p:growl id="growl" showDetail="true" styleClass="messages">
+         <p:autoUpdate />
+      </p:growl>
+
+      <p:splitter id="form-builder" styleClass="form-builder-create">
+
+         <p:splitterPanel minSize="25" size="35">
+            <div class="cadastro-form">
+
+               <div class="form-campo ui-fluid formgrid grid">
+
+                  <div class="field" style="flex-direction: row; align-items: center;">
+                     <p:outputLabel for="@next" styleClass="block" style="width: 100%; max-width: 300px;">Mostrar imagem no formulário?</p:outputLabel>
+                     <p:selectOneButton id="imgProcess" value="#{formularioCadastroBean.formulario.imagemAtiva}">
+                        <f:selectItem itemLabel="Sim" itemValue="#{true}" />
+                        <f:selectItem itemLabel="Não" itemValue="#{false}" />
+                        <f:ajax execute="@this" event="change" render="imgForm" />
+                     </p:selectOneButton>
+                  </div>
+
+                  <div class="field">
+                     <p:outputLabel for="@next" styleClass="block">Título do Formulário</p:outputLabel>
+                     <p:inputText styleClass="block" id="titleForm" pt:placeholder="Digite o título aqui" value="#{formularioCadastroBean.formulario.descricao}">
+                        <f:ajax execute="@this" event="keyup" render="title-form-criado" />
+                     </p:inputText>
+                  </div>
+
+                  <div class="field">
+                     <p:outputLabel for="@next" styleClass="block">Texto do botão</p:outputLabel>
+                     <p:inputText styleClass="block" id="botaoFormInput" pt:placeholder="Digite o título aqui" value="#{formularioCadastroBean.formulario.textoBotao}">
+                        <f:ajax execute="@this" event="keyup" render="botaoForm" />
+                     </p:inputText>
+                  </div>
+
+                  <p:fieldset styleClass="fieldset-campo" legend="Adicionar Campo">
+                     <div class="field">
+                        <p:outputLabel for="@next" styleClass="block">Título do Campo</p:outputLabel>
+                        <p:inputText id="addCampo" value="#{formularioCadastroBean.campo.descricao}" pt:placeholder="Digite aqui">
+                           <f:ajax execute="@this" event="blur" render="@this" />
+                        </p:inputText>
+                     </div>
+
+                     <div class="field col-12 md:col-4">
+                        <p:outputLabel for="@next" value="Selecione o tipo do campo" />
+                        <p:selectOneMenu id="addTipo" appendTo="@this" value="#{formularioCadastroBean.campo.tipo}">
+                           <f:selectItem itemLabel="Tipo" itemValue="" />
+                           <f:selectItem itemLabel="Texto" itemValue="1" />
+                           <f:selectItem itemLabel="Área de texto" itemValue="2" />
+                           <f:selectItem itemLabel="Número" itemValue="3" />
+                           <f:selectItem itemLabel="Caixa de seleção" itemValue="4" />
+                           <f:selectItem itemLabel="Selecione" itemValue="5" />
+                           <f:selectItem itemLabel="Rádio" itemValue="6" />
+                           <f:selectItem itemLabel="Email" itemValue="7" />
+                           <f:selectItem itemLabel="Data" itemValue="8" />
+                           <f:ajax execute="@this" event="change" render="@this" />
+                        </p:selectOneMenu>
+
+                        <div class="field">
+                           <p:outputLabel for="@next" styleClass="block">Este campo é obrigatório?</p:outputLabel>
+                           <p:selectOneRadio id="line" value="#{formularioCadastroBean.campo.obrigatorio}" layout="lineDirection">
+                              <f:selectItem itemLabel="Sim" itemValue="#{true}" />
+                              <f:selectItem itemLabel="Não" itemValue="#{false}" />
+                              <f:ajax execute="@this" event="change" render="@this" />
+                           </p:selectOneRadio>
+                        </div>
+                     </div>
+
+                     <p:commandButton type="button" action="#{formularioCadastroBean.addCampoForm()}" value="Adicionar Campo ao formulário">
+                        <f:ajax execute="@this" event="click" render="campos addCampo addTipo" />
+                     </p:commandButton>
+                  </p:fieldset>
+
+                  <h:panelGroup id="campos" layout="block" styleClass="campos">
+                     <p:accordionPanel activeIndex="" id="accordionCampos" var="campo" styleClass="campos" widgetVar="accordionCampos" value="#{formularioCadastroBean.formulario.campos}"
+                        varStatus="status">
+                        <p:tab id="campo">
+                           <f:facet name="title">
+                              <h:outputText id="tabTitle" value="#{formularioCadastroBean.getTipoCampoNome(campo.tipo)}: #{campo.descricao}" />
+
+                              <div style="display: flex; gap: 10px; flex: 1; justify-content: end;">
+                                 <p:commandButton process="@this" update="frm:campos" icon="pi pi-times" action="#{formularioCadastroBean.removerCampoForm(status.index)}">
+                                    <p:ajax process="@this" update="frm:campos" event="click" />
+                                 </p:commandButton>
+
+                                 <p:commandButton process="@this" update="frm:campos" icon="pi pi-arrow-up" action="#{formularioCadastroBean.moverCampo(campo, status.index, 'up')}">
+                                    <p:ajax event="click" process="@this" update="frm:campos" />
+                                 </p:commandButton>
+
+                                 <p:commandButton process="@this" update="frm:campos" icon="pi pi-arrow-down" action="#{formularioCadastroBean.moverCampo(campo, status.index, 'down')}">
+                                    <p:ajax event="click" process="@this" update="frm:campos" />
+                                 </p:commandButton>
+                              </div>
+
+                           </f:facet>
+
+                           <div class="field" style="flex-direction: row; gap: 10px;">
+                              <p:outputLabel for="@next" styleClass="block">Obrigatório</p:outputLabel>
+                              <p:toggleSwitch value="#{campo.obrigatorio}" offIcon="pi pi-check" onIcon="pi pi-times">
+                                 <f:ajax execute="@this" event="change" render="@this" listener="#{formularioCadastroBean.gerarForm}" />
+                              </p:toggleSwitch>
+                           </div>
+
+                           <div class="field">
+                              <p:outputLabel for="@next" styleClass="block">Título do campo</p:outputLabel>
+                              <p:inputText value="#{campo.descricao}" pt:placeholder="Digite uma sugestão">
+                                 <p:ajax process="@this" update="tabTitle" event="keyup" listener="#{formularioCadastroBean.verificarTitulo(campo, status.index)}" />
+                              </p:inputText>
+                           </div>
+
+                           <h:panelGroup styleClass="field" layout="block" rendered="#{campo.tipo != 4 and campo.tipo != 5 and campo.tipo != 6}">
+                              <p:outputLabel for="@next" styleClass="block">Sugestão para #{formularioCadastroBean.getTipoCampoNome(campo.tipo)}</p:outputLabel>
+                              <p:inputText id="sugestaoCampo" value="#{campo.sugestao}" pt:placeholder="Digite uma sugestão">
+                                 <f:ajax execute="@this" event="change" render="@this" listener="#{formularioCadastroBean.gerarForm}" />
+                              </p:inputText>
+                           </h:panelGroup>
+                           <p:fieldset rendered="#{campo.tipo == 4 || campo.tipo == 5 || campo.tipo == 6}" styleClass="fieldset-campo" legend="Adicionar Opção">
+                              <div class="field">
+                                 <p:outputLabel for="@next" styleClass="block">Descrição da Opção</p:outputLabel>
+                                 <p:inputText id="opcao-text" value="#{formularioCadastroBean.opcao.descricao}" pt:placeholder="Digite uma opção">
+                                    <f:ajax execute="@this" event="blur" render="@this" />
+                                 </p:inputText>
+                                 <p:commandButton type="button" action="#{formularioCadastroBean.addOpcaoCampo(campo)}" value="Adicionar opção ao campo">
+                                    <f:ajax execute="@this" event="click" render="opcoes opcao-text" />
+                                 </p:commandButton>
+                              </div>
+
+                              <h:panelGroup id="opcoes" layout="block" styleClass="opcoes">
+                                 <p:dataTable id="tableOpcoes" var="opcao" value="#{campo.opcoes}" rowIndexVar="index" draggableRows="true">
+
+                                    <p:column headerText="Opções do campo">
+                                       <div style="display: flex; justify-content: space-between; align-items: center;">
+                                          <h:outputText id="opcao" value="#{opcao.descricao}" />
+
+                                          <div style="display: flex; gap: 10px;">
+                                             <p:commandButton process="@this" update="tableOpcoes" icon="pi pi-times" action="#{formularioCadastroBean.removerOpcaoCampo(campo, index)}">
+                                                <p:ajax event="click" process="@this" update="tableOpcoes" />
+                                             </p:commandButton>
+
+                                             <p:commandButton process="@this" update="tableOpcoes" icon="pi pi-arrow-up" action="#{formularioCadastroBean.moverOpcao(campo.opcoes, opcao, index, 'up')}">
+                                                <p:ajax event="click" process="@this" update="tableOpcoes" />
+                                             </p:commandButton>
+
+                                             <p:commandButton process="@this" update="tableOpcoes" icon="pi pi-arrow-down"
+                                                action="#{formularioCadastroBean.moverOpcao(campo.opcoes, opcao, index, 'down')}">
+                                                <p:ajax event="click" process="@this" update="tableOpcoes" />
+                                             </p:commandButton>
+                                          </div>
+                                       </div>
+
+                                    </p:column>
+                                 </p:dataTable>
+                              </h:panelGroup>
+                           </p:fieldset>
+                        </p:tab>
+                     </p:accordionPanel>
+                  </h:panelGroup>
+               </div>
+
+
+               <div class="field-btn-salvar">
+                  <p:commandButton action="#{formularioCadastroBean.salvar()}" value="Salvar formulário" />
+                  <p:commandButton action="formularioList?faces-redirect=true" value="Listagem de forms." />
+               </div>
+            </div>
+         </p:splitterPanel>
+
+         <p:splitterPanel minSize="30" size="65" style="overflow-y: scroll;">
+            <div class="visualiza-form">
+               <h:panelGroup layout="block" id="form-criado" styleClass="form-criado">
+                  <h:panelGroup id="imgForm" styleClass="imagem-form">
+                     <h:graphicImage rendered="#{formularioCadastroBean.formulario.imagemAtiva}" value="#{formularioCadastroBean.formulario.imagem}" />
+                  </h:panelGroup>
+                  <h1 class="title">
+                     <h:outputText id="title-form-criado" value="#{formularioCadastroBean.formulario.descricao}" />
+                  </h1>
+                  <div id="elementos-form" class="elementos-form"></div>
+                  <p:commandButton type="button" value="#{formularioCadastroBean.formulario.textoBotao}" id="botaoForm" styleClass="btn-form" />
+               </h:panelGroup>
+               <a href="https://vitucelio.dev.br" target="_blank" class="criado-por"> <span>Criado por Vítor Célio</span> <!--  <h:graphicImage value="/resources/img/mini-form.png" /> -->
+               </a>
+            </div>
+         </p:splitterPanel>
+      </p:splitter>
+   </h:form>
+
+   <h:outputScript library="js" name="form.js" />
+</h:body>
+</html>

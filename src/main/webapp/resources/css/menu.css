@@ -1,0 +1,139 @@
+@charset "UTF-8";
+
+body {
+	background-color: #18191A;
+}
+
+.menu {
+	display: flex;
+	justify-content: space-between;
+	background-color: #242526;
+	max-width: 100%;
+	border-bottom: 1px solid #3A3B3C;
+	position: -webkit-sticky; /* Necessário para funcionar no Safari */
+	position: sticky;
+	top: 0;
+	z-index: 999;
+}
+
+.menu2 {
+	display: flex;
+	justify-content: space-between;
+	background-color: transparent;
+	max-width: 100%;
+	position: -webkit-sticky; /* Necessário para funcionar no Safari */
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+}
+
+.menu-input {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex: 1;
+	padding: 6px;
+}
+
+.menu-input-grupo {
+	padding: 10px 15px;
+	background-color: #3A3B3C;
+	border-radius: 50px;
+	gap: 4px;
+	display: flex;
+	align-items: center;
+}
+
+.menu-input-grupo input::placeholder{
+	color: #A9ABB0;
+}
+
+.menu-input-grupo i {
+	color: white;
+	margin-right: 6px;
+}
+
+.menu-input-grupo input {
+	border: none;
+	background-color: transparent;
+	outline: none;
+	font-size: 15px;
+	color: white;
+}
+
+.menu-nav {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	margin: 0 auto;
+	flex: 1;
+}
+
+.menu-nav a {
+	text-decoration: none;
+	padding: 10px 50px;
+	font-size: 25px;
+	border-radius: 6px;
+	color: #B8BBBF;
+}
+
+.menu-nav a:hover {
+	background-color: #3A3B3C;
+}
+
+a.ativo {
+	color: #2374E1 !important;
+	border-bottom: 3px solid #2374E1;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	align-self: end;
+}
+
+a.ativo:hover {
+	background-color: transparent !important;
+}
+
+.menu-botao {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 10px;
+	flex: 1;
+	padding: 6px;
+}
+
+.botao-messenger {
+	padding: 10px;
+	background-color: #3A3B3C;
+	font-size: 20px;
+	color: white;
+	border-radius: 100%;
+}
+
+.menu-botao input {
+	border: none;
+	background-color: transparent;
+}
+
+.menu-botao img {
+	cursor: pointer;
+	border-radius: 50px;
+}
+
+.botaoFecharMenu {
+	padding: 12px;
+	border-radius: 100%;
+	background-color: #18191A;
+	color: white;
+	font-size: 17px;
+}
+
+.botaoFecharMenu i {
+	display: block;
+	height: 17px;
+	width: 17px;
+}
+
+.botaoFecharMenu:hover {
+	background-color: #2D2E2E;
+}

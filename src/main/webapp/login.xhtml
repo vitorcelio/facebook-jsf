@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+		xmlns:f="http://java.sun.com/jsf/core" 
+		xmlns:h="http://java.sun.com/jsf/html" 
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+		xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+	<title>Facebook - entre ou cadastre-se</title>
+	<link rel="icon" type="image/x-icon" href="https://static.xx.fbcdn.net/rsrc.php/yD/r/d4ZIVX-5C-b.ico"/>
+      <h:outputStylesheet name="default.css" library="css" />
+      <h:outputStylesheet name="login.css" library="css"/>
+</h:head>
+<h:body style="background-color: #F0F2F5"> 
+	<div class="body-login">
+		<div class="esquerda">
+			<h:graphicImage value="https://static.xx.fbcdn.net/rsrc.php/y8/r/dF5SId3UHWd.svg" styleClass="logo"/>
+			<h1>O Facebook ajuda você a se conectar e compartilhar com as pessoas que fazem parte da sua vida.</h1>
+		</div>
+		<div class="direita">
+			<div class="box-form">
+				<h:form styleClass="form-login">
+					<h:inputText value="#{loginBean.usernameEmail}" styleClass="input-login" pt:placeholder="Email ou telefone"/>
+					<h:inputSecret value="#{loginBean.senha}" styleClass="input-login" pt:placeholder="Senha"/>
+                              <h:messages globalOnly="true" styleClass="erroLogin" id="mensagemGeral" />
+					<h:commandButton styleClass="botao bg-azul" value="Entrar" action="#{loginBean.login()}">
+                                 <f:ajax event="click" execute="@this @form" render="@form mensagemGeral" />
+                              </h:commandButton>
+					<h:commandLink styleClass="reset-senha" value="Esqueceu a senha?" />
+				</h:form>
+				<br/>
+				<hr style="border:1px solid #DADDE1; background-color: #DADDE1"/>
+				<br/>
+				<h:form id="cadastro" styleClass="form-cadastro">
+					<h:commandButton  styleClass="botao bg-verde" value="Criar nova conta" id="criarConta" action="cadastre?faces-redirect=true"/>
+				</h:form>
+			</div>
+		</div>
+	</div>
+</h:body>
+</html>

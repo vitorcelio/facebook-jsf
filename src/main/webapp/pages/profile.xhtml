@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+   <f:metadata>
+      <f:viewParam name="username" value="#{profileBean.username}" id="username" />
+      <f:viewAction action="#{profileBean.carregarPerfil()}" if="#{param['username'] != null}" />
+   </f:metadata>
+
+   <title>#{profileBean.usuario.nome} | Facebook</title>
+   <link rel="icon" type="image/x-icon" href="https://static.xx.fbcdn.net/rsrc.php/yD/r/d4ZIVX-5C-b.ico" />
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
+   <link rel="StyleSheet" href="/resources/css/default.css" />
+   <link rel="StyleSheet" href="/resources/css/menu.css" />
+   <link rel="StyleSheet" href="/resources/css/profile.css" />
+   <link rel="StyleSheet" href="/resources/css/home.css" />
+   <link rel="StyleSheet" href="/resources/css/publicacoes.css" />
+   <link rel="StyleSheet" href="/resources/css/amigos-todos.css" />
+   <link rel="StyleSheet" href="/resources/css/fotos.css" />
+</h:head>
+<h:body>
+   <h:messages globalOnly="true" styleClass="mensagemGeral" id="mensagemGeral" />
+   <ui:include src="/pages/templates/menu.xhtml" />
+   <div class="main" id="mainPerfil">
+      <div class="home-perfil">
+         <div class="capa">
+            <h:graphicImage value="#{profileBean.usuario.fotoCapa != null ? profileBean.usuario.fotoCapa : '/resources/img/sem-capa.png' }" width="100%" height="100%" />
+         </div>
+         <div class="informacoes">
+            <h:graphicImage value="#{profileBean.usuario.fotoPerfil != null ? profileBean.usuario.fotoPerfil : '/resources/img/sem-perfil.png' }" width="180" height="180" style="object-fit: cover" id="fotoPerfilPrincipal" />
+            <h:form class="nomes-informacao " id="infoPerfilprincipal">
+               <h:outputText value="#{profileBean.usuario.nome} #{profileBean.usuario.sobrenome}" styleClass="nome-completo" />
+               <div>
+                  <div class="informacao-perfil">
+                     <p class="amigos-em-comum">
+                        <h:outputText value="#{profileBean.getAmigos(null, null).size()} amigos " />
+                        <h:outputText value="&bull; 8 em comum" rendered="#{profileBean.usuario.username ne homeBean.usuarioLogado.username}"/>
+                     </p>
+                     <div>
+                        <ui:repeat var="amigo" value="#{profileBean.getAmigos(0, 8)}">
+                           <h:graphicImage value="#{amigo.fotoMiniatura != null ? amigo.fotoMiniatura : '/resources/img/sem-perfil.png' }" title="#{amigo.nome}" width="30" height="30" style="object-fit: cover;"/>
+                        </ui:repeat>
+                     </div>
+                  </div>
+                  <div class="botoes-perfil">
+                     <h:commandLink styleClass="botao-perfil bg-azul sumir" rendered="#{profileBean.usuario.username ne homeBean.usuarioLogado.username}">
+                        <i class="bi bi-person-plus-fill"></i>
+                        <p>Adicionar</p>
+                     </h:commandLink>
+                     <h:commandLink styleClass="botao-perfil bg-azul" rendered="#{profileBean.usuario.username ne homeBean.usuarioLogado.username}">
+                        <i class="bi bi-person-x-fill"></i>
+                        <p>Cancelar solicitação</p>
+                     </h:commandLink>
+                     <h:commandLink styleClass="botao-perfil bg-cinza" rendered="#{profileBean.usuario.username ne homeBean.usuarioLogado.username}">
+                        <i class="bi bi-messenger"></i>
+                        <p>Mensagem</p>
+                     </h:commandLink>
+                     <a onclick="abrirEditar()" class="botao-perfil bg-cinza #{profileBean.usuario.username eq homeBean.usuarioLogado.username ? null : 'sumir'}"> 
+                        <i class="bi bi-pencil-fill"></i>
+                        <span>Editar perfil</span>
+                     </a>
+                  </div>
+               </div>
+            </h:form>
+            <div id="perfilEditarBody" class="page-publicar scroll-perfil sumir">
+               <h:form id="main-editar-perfil" styleClass="main-publicar width-editar" enctype="multipart/form-data" acceptcharset="ISO-8859-1">
+                  <div class="publica-header">
+                     <h:outputLabel />
+                     <h:outputText value="Editar perfil" />
+                     <i onclick="abrirEditar()" class="bi bi-x-lg"></i>
+                  </div>
+                  <div>
+                     <div class="publica-header sem-borda">
+                        <h:outputText value="Foto do perfil" />
+                        <a onclick="abrirEditarFoto()" class="link-texto"><h:outputText value="#{profileBean.usuario.fotoMiniatura != null ? 'Editar' : 'Adicionar' }" /></a>
+                        <div id="perfilEditarFoto" class="page-publicar sumir">
+                           <div class="main-publicar">
+                              <div class="publica-header">
+                                 <h:outputLabel />
+                                 <h:outputText value="Atualizar foto de perfil" />
+                                 <i id="fecharPublicacao" onclick="abrirEditarFoto()" class="bi bi-x-lg"></i>
+                              </div>
+                              <div class="menu-editar-perfil" id="menu-editar-perfil">
+                                 <h:outputLabel for="perfilInput" styleClass="menu-editar-perfil-item">
+                                    <i class="bi bi-capslock-fill"></i>
+                                    <h:outputText value="Carregar foto" />
+                                 </h:outputLabel>
+                                 <h:inputFile id="perfilInput" onchange="fileFotoPerfil()" styleClass="sumir" value="#{profileBean.form.fotoPerfil}" />
+                              </div>
+                              <div class="pre-imagens sumir" id="imagemPerfilArea">
+                                 <img src="" id="pre-imagem-perfil" class="imagem-perfil-upload" />
+                                 <div class="biografia-botoes espacos-edit-botoes">
+                                    <h:commandButton type="button" value="Cancelar" styleClass="botao-perfil bg-transap sem-borda" />
+                                    <h:commandButton value="Salvar" styleClass="botao-perfil bg-azul sem-borda" action="#{profileBean.editarFotoPerfil()}">
+                                       <f:ajax event="click" execute="@this perfilInput" render="@all" />
+                                    </h:commandButton>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="center">
+                        <h:graphicImage id="fotoPerfilMiniatura" value="#{profileBean.usuario.fotoPerfil != null ? profileBean.usuario.fotoPerfil : '/resources/img/sem-perfil.png' }" width="160" height="160" style="object-fit: cover" />
+                     </div>
+                  </div>
+                  <div>
+                     <div class="publica-header sem-borda">
+                        <h:outputText value="Foto da capa" />
+                        <a onclick="abrirEditarCapa()" class="link-texto"><h:outputText value="#{profileBean.usuario.fotoCapa != null ? 'Editar' : 'Adicionar' }" /></a>
+                        <div id="perfilEditarCapa" class="page-publicar sumir">
+                           <div class="main-publicar">
+                              <div class="publica-header">
+                                 <h:outputLabel />
+                                 <h:outputText value="Atualizar foto da capa" />
+                                 <i id="fecharPublicacao" onclick="abrirEditarCapa()" class="bi bi-x-lg"></i>
+                              </div>
+                              <div class="menu-editar-perfil" id="menu-editar-capa">
+                                 <h:outputLabel for="capaInput" styleClass="menu-editar-perfil-item">
+                                    <i class="bi bi-capslock-fill"></i>
+                                    <h:outputText value="Carregar foto" />
+                                 </h:outputLabel>
+                                 <h:inputFile id="capaInput" onchange="fileFotoCapa()" styleClass="sumir" value="#{profileBean.form.fotoCapa}" />
+                              </div>
+                              <div class="pre-imagens sumir" id="imagemCapaArea">
+                                 <img src="" id="pre-imagem-capa" class="imagem-capa-upload" />
+                                 <div class="biografia-botoes espacos-edit-botoes">
+                                    <h:commandButton type="button" value="Cancelar" styleClass="botao-perfil bg-transap sem-borda" />
+                                    <h:commandButton value="Salvar" styleClass="botao-perfil bg-azul sem-borda" action="#{profileBean.editarFotoCapa()}">
+                                       <f:ajax event="click" execute="@this capaInput" render="@all" />
+                                    </h:commandButton>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="center">
+                        <h:graphicImage styleClass="sem-capa" value="#{profileBean.usuario.fotoCapa != null ? profileBean.usuario.fotoCapa : '/resources/img/sem-capa.png' }" width="160" />
+                     </div>
+                  </div>
+                  <div>
+                     <div class="publica-header sem-borda">
+                        <h:outputText value="Biografia" />
+                        <a onclick="abrirEditarBio()" class="link-texto" id="biografiaBotao">
+                        <h:outputText value="#{profileBean.usuario.biografia != null and empty profileBean.usuario.biografia ? 'Editar' : 'Adicionar' }" /></a>
+                     </div>
+                     <div class="center">
+                        <h:outputText value="#{profileBean.usuario.biografia != null ? profileBean.usuario.biografia : 'Descreva-se...'}" styleClass="texto-biografia" id="biografiaTexto" />
+                        <div id="biografiaBody" class="biografia-body sumir">
+                           <h:inputTextarea value="#{profileBean.usuario.biografia}" styleClass="biografia-input" pt:placeholder="Descreva quem é você" id="biografiaInput">
+                              <f:ajax event="keyup" render="salvarBiografia" />
+                           </h:inputTextarea>
+                           <div class="biografia-botoes">
+                              <h:commandButton type="button" onclick="abrirEditarBio()" value="Cancelar" styleClass="botao-perfil bg-cinza sem-borda" />
+                              <h:commandButton action="#{profileBean.editarUsuario()}" value="Salvar" styleClass="botao-perfil bg-azul sem-borda" disabled="#{profileBean.usuario.biografia eq '' or profileBean.usuario.biografia eq null}"
+                                 id="salvarBiografia" />
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div>
+                     <div class="publica-header sem-borda">
+                        <h:outputText value="Personalize a sua apresentação" />
+                        <a class="link-texto" onclick="abrirEditarInformacao()"><h:outputText value="#{profileBean.usuario.fotoCapa != null ? 'Editar' : 'Adicionar' }" /></a>
+                     </div>
+                     <div>
+                        <ul class="apresentacao-perfil">
+                           <li class="item-apresentacao"><i class="bi bi-house-door-fill"></i>
+                              <p>
+                                 Cidade atual
+                                 <h:outputText value="#{profileBean.usuario.cidadeQueMora}" />
+                              </p></li>
+                           <li class="item-apresentacao"><i class="bi bi-briefcase-fill"></i>
+                              <p>
+                                 Local de trabalho
+                                 <h:outputText value="#{profileBean.usuario.empresaQueTrabalha}" />
+                              </p></li>
+                           <li class="item-apresentacao"><i class="bi bi-mortarboard-fill"></i>
+                              <p>
+                                 instituição de ensino
+                                 <h:outputText value="#{profileBean.usuario.escolaQueFrequentou}" />
+                              </p></li>
+                           <li class="item-apresentacao"><i class="bi bi-geo-alt-fill"></i>
+                              <p>
+                                 Cidade natal
+                                 <h:outputText value="#{profileBean.usuario.cidadeQueNasceu}" />
+                              </p></li>
+                           <li class="item-apresentacao"><i class="bi bi-heart-fill"></i>
+                              <p>
+                                 Status de relacionamento
+                                 <h:outputText value="#{profileBean.usuario.estaCasado ? 'Casado' : 'Namorando' }" rendered="#{profileBean.usuario.estaEmRelacionamento}" />
+                              </p></li>
+                        </ul>
+                     </div>
+                      <div id="perfilEditarInformacoes" class="page-publicar scroll-perfil sumir" >
+                           <div class="main-publicar width-editar" style="width: 470px !important;">
+                              <div class="publica-header">
+                                 <h:outputLabel />
+                                 <h:outputText value="Atualizar informações do usuário" />
+                                 <i onclick="abrirEditarInformacao()" class="bi bi-x-lg"></i>
+                              </div>
+                              <div class="menu-editar-perfil">
+                                 <h:outputLabel value="Nome" styleClass="label-informacoes"/>
+                                 <h:inputText value="#{profileBean.usuario.nome}" styleClass="informacoes-input" pt:placeholder="Digite seu nome"/>
+                                 
+                                 <h:outputLabel value="Sobrenome" styleClass="label-informacoes" />
+                                 <h:inputText value="#{profileBean.usuario.sobrenome}" styleClass="informacoes-input" pt:placeholder="Digite seu sobrenome"/>
+                                 
+                                 <h:outputLabel value="Empresa que trabalha" styleClass="label-informacoes" />
+                                 <h:inputText value="#{profileBean.usuario.empresaQueTrabalha}" styleClass="informacoes-input" pt:placeholder="Digite a empresa que trabalha"/>
+                                 
+                                 <h:outputLabel value="Cidade que mora" styleClass="label-informacoes" />
+                                 <div class="grupo-input-marketplace">
+                                    <h:inputText value="#{profileBean.usuario.cidadeQueMora}" styleClass="informacoes-input" pt:placeholder="Digite sua cidade atual" id="cidadeQueMora"/>
+                                    
+                                    <h:commandButton action="#{profileBean.carregarListLonLatCidadeAtual}" styleClass="sumir" id="buttonLocaliza">
+                                       <f:ajax execute="@this cidadeQueMora" event="click" render="main-editar-perfil:list-localizacao" />
+                                    </h:commandButton>
+               
+                                    <h:panelGroup layout="block" styleClass="botaoPesquisar" onclick="document.getElementById('main-editar-perfil:buttonLocaliza').click()">
+                                       <i class="bi bi-search"></i>
+                                    </h:panelGroup>
+                                 </div>
+                                 <h:panelGroup layout="block" styleClass="input-marketplace-3" id="list-localizacao">
+
+                                    <ui:repeat id="lonlatList" value="#{profileBean.lonlatList}" var="geo" size="5" varStatus="lonlastId">
+                                       <h:panelGroup layout="block" id="lonlat" styleClass="botaoLocalizacao">
+                                          <h:commandButton type="button" action="#{profileBean.selectLocalizacaoOndeMora(geo)}" styleClass="sumir" id="botaoSelectLocalizacao">
+                                             <f:ajax execute="@this" event="click" render="main-editar-perfil:cidadeQueMora main-editar-perfil:list-localizacao" />
+                                          </h:commandButton>
+               
+                                          <h:commandLink type="button" value="#{profileBean.gerarLonLat(geo)}" styleClass="textLocalizacao"
+                                             onclick="document.getElementById('main-editar-perfil:lonlatList:'+#{lonlastId.index}+':botaoSelectLocalizacao').click()">
+                                             <f:ajax render="main-editar-perfil:cidadeQueMora main-editar-perfil:list-localizacao" />
+                                          </h:commandLink>
+                                       </h:panelGroup>
+                                    </ui:repeat>
+               
+                                 </h:panelGroup>
+                                 
+                                 <h:outputLabel value="Cidade que nasceu" styleClass="label-informacoes" />
+                                 <h:inputText value="#{profileBean.usuario.cidadeQueNasceu}" styleClass="informacoes-input" pt:placeholder="Digite a cidade que nasceu"/>
+                                 <h:panelGroup layout="block" styleClass="input-marketplace-3" id="list-localizacao2">
+
+                                    <ui:repeat id="lonlatList2" value="#{profileBean.lonlatList}" var="geo" size="5" varStatus="lonlastId">
+                                       <h:panelGroup layout="block" id="lonlat" styleClass="botaoLocalizacao">
+                                          <h:commandButton type="button" action="#{profileBean.selectLocalizacaoOndeNasceu(geo)}" styleClass="" id="botaoSelectLocalizacao"
+                                             onclick="document.getElementById('frm:buttonLatLon').click()">
+                                             <f:ajax execute="@this" event="click" render="frm:mensagemCidade frm:cidade cidade2Previa cidade1Previa frm:botaoSalvarItem" />
+                                          </h:commandButton>
+               
+                                          <h:commandLink type="button" value="#{profileBean.gerarLonLat(geo)}" styleClass="textLocalizacao"
+                                             onclick="document.getElementById('main-editar-perfil:lonlatList:'+#{lonlastId.index}+':botaoSelectLocalizacao').click()">
+                                             <f:ajax render="inputCity" />
+                                          </h:commandLink>
+                                       </h:panelGroup>
+                                    </ui:repeat>
+               
+                                 </h:panelGroup>
+                                 
+                                 <h:outputLabel value="Está em um relacionamento" styleClass="label-informacoes" />
+                                 <h:selectOneRadio value="#{profileBean.usuario.estaEmRelacionamento}" styleClass="label-informacoes">
+                                    <f:selectItem itemLabel="Sim" itemValue="#{true}" />
+                                    <f:selectItem itemLabel="Não" itemValue="#{false}"/>
+                                    <f:ajax event="click" render="estaCasado inputRelacionado" />
+                                 </h:selectOneRadio>
+                                 
+                                 <h:outputLabel value="Está casado(a)" styleClass="label-informacoes" />
+                                 <h:selectOneRadio id="estaCasado" value="#{profileBean.usuario.estaCasado}" disabled="#{profileBean.usuario.estaEmRelacionamento eq false}" styleClass="label-informacoes">
+                                    <f:selectItem itemLabel="Sim" itemValue="#{true}" />
+                                    <f:selectItem itemLabel="Não" itemValue="#{false}"/>
+                                 </h:selectOneRadio>
+                                 
+                                 <h:outputLabel value="Nome da pessoa que está relacionado" styleClass="label-informacoes" />
+                                 <h:inputText id="inputRelacionado" value="#{profileBean.usuario.relacionamentoCom}" styleClass="informacoes-input" disabled="#{profileBean.usuario.estaEmRelacionamento eq false}" pt:placeholder="Digite a pessoa com quem está relacionado"/>
+                                 
+                                 <h:outputLabel value="Instagram" styleClass="label-informacoes" />
+                                 <h:inputText value="#{profileBean.usuario.instagram}" styleClass="informacoes-input" pt:placeholder="Digite seu instagram. Ex: @vitucelio"/>
+                                 
+                                 <h:outputLabel value="WhatsApp" styleClass="label-informacoes" />
+                                 <h:inputText value="#{profileBean.usuario.whatsapp}" styleClass="informacoes-input" pt:placeholder="Digite seu número de WhatsApp"/>
+                                 
+                                 <div class="biografia-botoes" style="margin: 20px 0;">
+                                    <h:commandButton type="button" onclick="abrirEditarInformacao()" value="Cancelar" styleClass="botao-perfil bg-cinza sem-borda" />
+                                    <h:commandButton action="#{profileBean.editarUsuario()}" value="Salvar" styleClass="botao-perfil bg-azul sem-borda">
+                                    </h:commandButton>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                  </div>
+               </h:form>
+            </div>
+         </div>
+         <h:form id="botoes-perfil" styleClass="menu-perfil">
+            <h:commandButton type="button" id="publicacaoBotao" value="Publicações" styleClass="menu-perfil-ativo" />
+            <h:commandButton type="button" id="amigosBotao" value="Amigos" />
+            <h:commandButton type="button" id="fotosBotao" value="Fotos" />
+         </h:form>
+      </div>
+   </div>
+   <div class="publicacoes" id="publicacoes">
+      <ui:include src="/pages/templates/profile-publicacoes.xhtml" />
+   </div>
+   <div class="amigos2 sumir" id="amigos">
+      <ui:include src="/pages/templates/profile-amigos.xhtml" />
+   </div>
+   <div class="fotos sumir" id="fotos">
+      <ui:include src="/pages/templates/profile-fotos.xhtml" />
+   </div>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+   <script>
+
+      function carregarMaisPublicacoes() {
+          const botaoCarregar = document.getElementById("botaoCarregar");
+          const carregarMais = document.getElementById("carregarMais");
+          const facebookLoading = document.getElementById("facebookLoading");
+          
+          botaoCarregar.click();
+          carregarMais.classList.add("sumir");
+          facebookLoading.classList.remove("sumir");
+          
+          setTimeout(() => {
+       	 carregarMais.classList.remove("sumir");
+              facebookLoading.classList.add("sumir");
+   	     }, 4000);
+          
+       }
+
+	function curtir(id, index) {
+		const post = document.getElementById('botao-curtir' + id);
+		const icone = document.getElementById('icone-curtir' + id);
+		const numeroCurtidas = document.getElementById('publicacoesList:' + index + ':publicacao:numeroCurtidas');
+		
+		$.ajax({
+			type: "POST",
+			url: "/rest/curtida/" + #{homeBean.usuarioLogado.id} + "/" + id,
+			headers: { 
+		        'Accept': 'application/json',
+		        'Content-Type': 'application/json' 
+		    	},
+			data: null,
+			success: function(data) {
+		console.log('oi, curti');
+				let publiCurtida =  numeroCurtidas.textContent;
+				post.classList.toggle("botao-post-curtido");
+				if(icone.classList.contains('bi-hand-thumbs-up')) {
+					icone.classList.remove('bi-hand-thumbs-up');
+					icone.classList.add('bi-hand-thumbs-up-fill');
+					var numero = Number(publiCurtida) + 1;
+					numeroCurtidas.textContent = numero;
+				} else {
+					icone.classList.add('bi-hand-thumbs-up');
+					icone.classList.remove('bi-hand-thumbs-up-fill');
+					var numero = Number(publiCurtida) - 1;
+					numeroCurtidas.textContent = numero;
+				}
+				
+			}
+		});
+	}
+
+	function comentar(id, index) {
+		const inputComentario = document.getElementById('publicacoesList:'+index+':publicacao:inputComentario');
+		
+		$.ajax({
+			type: "POST",
+			url: "/rest/comentario/comentar",
+			headers: { 
+		        'Accept': 'application/json',
+		        'Content-Type': 'application/json' 
+		    	},
+			data: JSON.stringify({
+				id: null,
+				texto: inputComentario.value,
+				idPublicacao: id,
+				idUsuarioLogado: #{homeBean.usuarioLogado.id}
+			}),
+			success: function(data) {
+				inputComentario.value = "";
+			}
+		});
+	}
+
+
+   	function fileFotoPerfil() {
+		var reader = new FileReader();
+		var imagem = document.getElementById('main-editar-perfil:perfilInput').files[0];
+		
+		const areaImagemPerfil = document.getElementById('imagemPerfilArea');
+		const areaInputPerfil = document.getElementById('menu-editar-perfil');
+		
+		const imagemPre = document.getElementById('pre-imagem-perfil');
+		
+		reader.onloadend = function() {
+			areaImagemPerfil.classList.remove('sumir');
+			areaInputPerfil.classList.add('sumir');
+			imagemPre.src = reader.result;
+		}
+
+		if(imagem) {
+			reader.readAsDataURL(imagem);
+		} else {
+			imagemPre.src = "";
+		}
+	}
+		
+   	function fileFotoCapa() {
+		var reader = new FileReader();
+		var imagem = document.getElementById('main-editar-perfil:capaInput').files[0];
+		
+		const areaImagemCapa = document.getElementById('imagemCapaArea');
+		const areaInputCapa = document.getElementById('menu-editar-capa');
+		
+		const imagemPre = document.getElementById('pre-imagem-capa');
+		
+		reader.onloadend = function() {
+			areaImagemCapa.classList.remove('sumir');
+			areaInputCapa.classList.add('sumir');
+			imagemPre.src = reader.result;
+		}
+
+		if(imagem) {
+			reader.readAsDataURL(imagem);
+		} else {
+			imagemPre.src = "";
+		}
+	}
+
+  </script>
+   <script src="/resources/js/profile.js"></script>
+   <script src="/resources/js/home.js"></script>
+   <script src="/resources/js/default.js"></script>
+      <div class="notificacao" id="notificacao">
+      <div class="notificacaoPerfil">
+         <img id="notificacaoImagem" />
+         <h2 id="notificacaoNome"></h2>
+      </div>
+      <small>Mensagem: <span id="notificacaoMsg"></span></small>
+   </div>
+   <script src="/resources/js/chat.js"></script>
+</h:body>
+</html>

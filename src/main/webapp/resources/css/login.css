@@ -1,0 +1,114 @@
+@charset "UTF-8";
+
+.body-login {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	max-width: 1100px;
+	width: 100%;
+	height: 95vh;
+	margin: 0 auto;
+}
+
+.esquerda {
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+}
+
+.logo {
+	align-self: flex-start;
+	width: 300px
+}
+
+.esquerda h1 {
+	align-self: flex-start;
+	font-weight: 400;
+	margin-left: 25px;
+	font-size: 25px;
+}
+
+.direita {
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.box-form {
+	padding: 20px;
+	background-color: white;
+	border-radius: 10px;
+	box-shadow: 0 0 0.7em #DEE0E3;
+	width: 70%
+}
+
+.form-login {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
+.form-cadastro {
+	display: flex;
+	justify-content: center;
+}
+
+.input-login {
+	padding: 15px;
+	font-size: 16px;
+	border: 1px solid #DEE0E9;
+	border-radius: 6px;
+}
+
+.botao {
+	padding: 15px;
+	border-radius: 6px;
+	border: none;
+	font-size: 20px;
+	font-weight: 600;
+	color: white;
+	cursor: pointer;
+}
+
+.reset-senha {
+	font-size: 15px;
+	text-align: center;
+	text-decoration: none;
+	color: #18A4F7;
+}
+
+.bg-azul {
+	background-color: #166FE5;
+}
+
+.bg-verde {
+	background-color: #36A420;
+	display: block !important;
+}
+
+@media ( max-width : 800px) {
+	.body-login {
+		display: grid;
+		grid-template-areas: "esquerda" "direita"
+	}
+	.esquerda, .direita {
+		width: 100%;
+		max-width: 500px;
+	}
+	.logo, .esquerda h1 {
+		align-self: center;
+		text-align: center;
+	}
+}
+
+.erroLogin {
+	color: red;
+	font-size: 12px;
+	list-style: none;
+	display: block;
+	margin: 2px 0;
+}

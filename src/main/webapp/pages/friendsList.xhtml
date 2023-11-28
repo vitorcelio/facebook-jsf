@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+   <title>Todos os amigos | Facebook</title>
+   <link rel="icon" type="image/x-icon" href="https://static.xx.fbcdn.net/rsrc.php/yD/r/d4ZIVX-5C-b.ico" />
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
+   <link rel="StyleSheet" href="/resources/css/default.css" />
+   <link rel="StyleSheet" href="/resources/css/menu.css" />
+   <link rel="StyleSheet" href="/resources/css/profile.css" />
+   <link rel="StyleSheet" href="/resources/css/friendList.css"/>
+</h:head>
+<h:body>
+   <ui:include src="/pages/templates/menu.xhtml" />
+   <div class="main-friend-list">
+      <div class="amigos">
+         <h:form styleClass="menu-amigos" id="frm-amigos">
+            <div class="menu-solicitacao-amigos-header">
+               <h:commandLink action="friends?faces-redirect=true">
+                  <i class="bi bi-arrow-left"></i>
+               </h:commandLink>
+               <div>
+                  <p>Amigos</p>
+                  <h1>Todos os amigos</h1>
+               </div>
+            </div>
+            <div class="li-input-grupo">
+               <div class="menu-input-grupo">
+                  <i class="bi bi-search"></i>
+                  <h:inputText pt:placeholder="Pesquisar amigos" binding="#{homeBean.nomesAmigos}">
+                     <f:ajax execute="@this" event="keyup" render="listAmigos" listener="#{homeBean.consultarAmigos}"  />
+                  </h:inputText>
+               </div>
+            </div>
+            <h:panelGroup layout="block" id="listAmigos">
+               <ul>
+                  <li class="item-menu-amigos">
+                     <p>#{homeBean.amigos.size()} amigos</p>
+                  </li>
+   
+                  <ui:repeat id="amigosList" var="amigo" value="#{homeBean.amigos}" varStatus="amigoId">
+                     <li><h:commandButton id="botao-perfil" styleClass="sumir">
+                           <f:setPropertyActionListener target="#{friendsBean.usuarioPrevia}" value="#{amigo}" />
+                           <f:ajax event="click" render="body-solicitacoes-sem-perfil body-solicitacoes" />
+                        </h:commandButton>
+                         <h:panelGroup styleClass="item-menu-amigos cursor-pointer" onclick="document.getElementById('frm-amigos:amigosList:'+ #{amigoId.index} +':botao-perfil').click()">
+                           <div>
+                              <h:graphicImage value="#{amigo.fotoMiniatura ne null ? amigo.fotoMiniatura : '/resources/img/sem-perfil.png'}" width="60" height="60" style="object-fit: cover" />
+                              <div class="nome-amigos">
+                                 <h:outputText value="#{amigo.nome}" />
+                                 <p>
+                                    <h:outputText value="3 amigos em comum" />
+                                 </p>
+                              </div>
+                           </div>
+                           <i class="bi bi-three-dots"></i>
+                        </h:panelGroup></li>
+                  </ui:repeat>
+               </ul>
+            </h:panelGroup>
+         </h:form>
+      </div>
+      <h:form styleClass="body-solicitacoes #{friendsBean.usuarioPrevia.id != null ? 'sumir' : ''}" id="body-solicitacoes-sem-perfil">
+         <h:graphicImage value="https://www.facebook.com/images/comet/empty_states_icons/people/null_states_people_dark_mode.svg" width="120" />
+         <h1>Selecione os nomes das pessoas para ver a prévia do perfil delas.</h1>
+      </h:form>
+      <h:form styleClass="body-solicitacoes sem-altura-e-centro #{friendsBean.usuarioPrevia.id != null ? '' : 'sumir'}" id="body-solicitacoes">
+         <div class="main-perfil">
+            <div class="home-perfil">
+               <div class="capa">
+                  <h:graphicImage value="#{friendsBean.usuarioPrevia.fotoCapa != null ? friendsBean.usuarioPrevia.fotoCapa : '/resources/img/sem-capa.png'}" width="100%" height="100%" />
+               </div>
+               <div class="informacoes">
+                  <h:graphicImage value="#{friendsBean.usuarioPrevia.fotoMiniatura != null ? friendsBean.usuarioPrevia.fotoPerfil : '/resources/img/sem-perfil.png' }" width="180" height="180" style="object-fit: cover" />
+                  <div class="nomes-informacao">
+                     <h:outputText value="#{friendsBean.usuarioPrevia.nome} #{friendsBean.usuarioPrevia.sobrenome}" styleClass="nome-completo" />
+                     <div>
+                        <div class="informacao-perfil">
+                           <p class="amigos-em-comum">
+                              <h:outputText value="1,7 mil" />
+                              amigos &bull;
+                              <h:outputText value="8" />
+                              em comum
+                           </p>
+                           <div>
+                              <h:graphicImage value="https://github.com/vitorcelio.png" width="30" />
+                              <h:graphicImage value="https://github.com/vitorcelio.png" width="30" />
+                              <h:graphicImage value="https://github.com/vitorcelio.png" width="30" />
+                              <h:graphicImage value="https://github.com/vitorcelio.png" width="30" />
+                              <h:graphicImage value="https://github.com/vitorcelio.png" width="30" />
+                              <h:graphicImage value="https://github.com/vitorcelio.png" width="30" />
+                              <h:graphicImage value="https://github.com/vitorcelio.png" width="30" />
+                              <h:graphicImage value="https://github.com/vitorcelio.png" width="30" />
+                           </div>
+                        </div>
+                        <div class="botoes-perfil">
+                           <h:commandLink styleClass="botao-perfil bg-azul">
+                              <i class="bi bi-person-plus-fill"></i>
+                              <p>Adicionar</p>
+                           </h:commandLink>
+                           <h:commandLink styleClass="botao-perfil bg-azul" rendered="false">
+                              <i class="bi bi-person-x-fill"></i>
+                              <p>Cancelar solicitação</p>
+                           </h:commandLink>
+                           <h:commandLink styleClass="botao-perfil bg-cinza">
+                              <i class="bi bi-messenger"></i>
+                              <p>Mensagem</p>
+                           </h:commandLink>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+      </h:form>
+   </div>
+   <div class="notificacao" id="notificacao">
+      <div class="notificacaoPerfil">
+         <img id="notificacaoImagem" />
+         <h2 id="notificacaoNome"></h2>
+      </div>
+      <small>Mensagem: <span id="notificacaoMsg"></span></small>
+   </div>
+   <script src="/resources/js/chat.js"></script>
+</h:body>
+</html>

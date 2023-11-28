@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+   <link rel="StyleSheet" href="/resources/css/notificacao.css" />
+   <script>
+// Configurações do recebimento da minha notificação
+   var uriMeuUsuario = "ws://localhost:8080/notificacao/" + '#{chatBean.urlMeuUsuario()}';
+   var usernameBack = "#{homeBean.usuarioLogado.username}";
+   </script>
+</h:head>
+<h:body>
+   <div class="menu">
+      <div class="menu-input">
+         <h:graphicImage library="img" name="facebook-logo.png" width="50" />
+         <h:form styleClass="menu-input-grupo">
+            <i class="bi bi-search"></i>
+            <h:inputText pt:placeholder="Pesquisar no Facebook" />
+         </h:form>
+      </div>
+      <h:form layout="block" styleClass="menu-nav">
+         <h:commandLink styleClass="#{menuBean.menu('/pages/home.jsf') eq true ? 'ativo' : null}" title="Página Inicial" action="home?faces-redirect=true">
+            <i class="bi bi-house-door-fill"></i>
+         </h:commandLink>
+
+         <h:commandLink styleClass="#{menuBean.menu('/pages/friends.jsf', '/pages/birthdays.jsf', '/pages/requests.jsf', '/pages/suggestions.jsf', '/pages/friendsList.jsf') eq true ? 'ativo' : null}"
+            title="Amigos" action="friends?faces-redirect=true">
+            <i class="bi bi-people-fill"></i>
+         </h:commandLink>
+
+         <h:commandLink
+            styleClass="#{menuBean.menu('/pages/marketplace.jsf', '/pages/marketplaceCategoria.jsf', '/pages/marketplaceCreate.jsf', '/pages/marketplaceCreateItem.jsf', '/pages/marketplaceItem.jsf') eq true ? 'ativo' : null}"
+            title="Marketplace" action="marketplace?faces-redirect=true">
+            <i class="bi bi-shop"></i>
+         </h:commandLink>
+      </h:form>
+      <h:form layout="block" styleClass="menu-botao">
+         <h:commandLink styleClass="botao-messenger" action="#{menuBean.redirecionarMesssenger(homeBean.usuarioLogado.username)}">
+            <i class="bi bi-messenger"></i>
+         </h:commandLink>
+
+         <h:commandButton type="button">
+            <h:graphicImage value="#{homeBean.usuarioLogado.fotoMiniatura ne null ? homeBean.usuarioLogado.fotoMiniatura : '/resources/img/sem-perfil.png' }" width="45" height="45"
+               style="object-fit: cover" />
+         </h:commandButton>
+      </h:form>
+   </div>
+</h:body>
+</html>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+   <link rel="StyleSheet" href="/resources/css/notificacao.css" />
+   <script>
+// Configurações do recebimento da minha notificação
+   var uriMeuUsuario = "ws://localhost:8080/notificacao/" + '#{chatBean.urlMeuUsuario()}';
+   var usernameBack = "#{homeBean.usuarioLogado.username}";
+   </script>
+</h:head>
+<h:body>
+	<h:form styleClass="menu-amigos">
+		<div class="menu-amigos-header">
+			<h1>Amigos</h1>
+			<i class="bi bi-gear-fill"></i>
+		</div>
+		<ul>
+			<li>
+				<h:commandLink styleClass="item-menu-amigos #{menuBean.menuAmigos('/pages/friends.jsf') eq true ? 'menu-amigos-ativo' : null}" action="friends?faces-redirect=true">
+					<div>
+						<i class="bi bi-people-fill"></i>
+						<p>Página inicial</p>
+					</div>
+				</h:commandLink>
+			</li>
+			<li>
+				<h:commandLink styleClass="item-menu-amigos" action="requests?faces-redirect=true">
+					<div>
+						<i class="bi bi-person-dash-fill"></i>
+						<p>Solicitações de amizade</p>
+					</div>
+					<i class="bi bi-chevron-right"></i>
+				</h:commandLink>
+			</li>
+			<li>
+				<h:commandLink styleClass="item-menu-amigos" action="suggestions?faces-redirect=true">
+					<div>
+						<i class="bi bi-person-plus-fill"></i>
+						<p>Sugestões</p>
+					</div>
+					<i class="bi bi-chevron-right"></i>
+				</h:commandLink>
+			</li>
+			<li>
+				<h:commandLink styleClass="item-menu-amigos" action="friendsList?faces-redirect=true">
+					<div>
+						<i class="bi bi-person-lines-fill"></i>
+						<p>Todos os amigos</p>
+					</div>
+					<i class="bi bi-chevron-right"></i>
+				</h:commandLink>
+			</li>
+			<li><h:commandLink styleClass="item-menu-amigos #{menuBean.menuAmigos('/pages/birthdays.jsf') eq true ? 'menu-amigos-ativo' : null}" action="birthdays?faces-redirect=true">
+					<div>
+						<i class="bi bi-gift-fill"></i>
+						<p>Aniversários</p>
+					</div>
+				</h:commandLink>
+			</li>
+		</ul>
+	</h:form>
+</h:body>
+</html>

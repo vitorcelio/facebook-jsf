@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+   xmlns:vitor="http://java.sun.com/jsf/composite/vitor">
+<h:head>
+ <f:metadata>
+      <f:viewParam name="token" value="#{marketplaceProdutoBean.tokenProduto}" id="token" />
+      <f:viewAction action="#{marketplaceProdutoBean.carregarProduto()}" if="#{param['token'] != null}" />
+   </f:metadata>
+   
+   <title>Facebook</title>
+   <link rel="icon" type="image/x-icon" href="https://static.xx.fbcdn.net/rsrc.php/yD/r/d4ZIVX-5C-b.ico" />
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
+   <link rel="StyleSheet" href="/resources/css/default.css" />
+   <link rel="StyleSheet" href="/resources/css/menu.css" />
+   <link rel="StyleSheet" href="/resources/css/marketplace.css" />
+   <link rel="StyleSheet" href="/resources/css/home.css" />
+   <link rel="StyleSheet" href="/resources/css/marketplaceItem.css" />
+   <script src="https://cdn.maptiler.com/maplibre-gl-js/v2.2.0-pre.2/maplibre-gl.js"></script>
+   <link href="https://cdn.maptiler.com/maplibre-gl-js/v2.2.0-pre.2/maplibre-gl.css" rel="stylesheet" />
+   <style>
+#map {
+	width: 100%;
+	height: 150px;
+      cursor: pointer;
+}
+
+#map2{
+   overflow: visible;
+   width: 100%;
+   height: 300px !important;
+}
+
+#map2 canvas {
+   position: relative;
+   width: 100% !important;
+   height: 100% !important;
+   border-bottom-left-radius: 8px;
+   border-bottom-right-radius: 8px;
+}
+
+.mapboxgl-ctrl-top-left .mapboxgl-ctrl, .maplibregl-ctrl-top-left .maplibregl-ctrl {
+   border: 1px solid #3A3B3C;
+   border-radius: 5px;
+}
+
+#map2 details {
+   display: none;
+}
+
+.maplibregl-ctrl-group button.maplibregl-ctrl-compass {
+   display: none
+}
+
+.mapboxgl-ctrl-top-left button {
+   width: 49px;
+   background-color: #242526 !important;
+}
+
+.mapboxgl-ctrl-group button+button, .maplibregl-ctrl-group button+button {
+   border-top: none;
+}
+
+.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-in .mapboxgl-ctrl-icon, .maplibregl-ctrl button.maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon {
+   background-image: url('/resources/img/icon-mais.png');
+   background-size: 15px;
+}
+
+.maplibregl-ctrl button.maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon:hover,
+.maplibregl-ctrl button.maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon:hover {
+   background-color: #3A3B3C;
+}
+
+.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon, .maplibregl-ctrl button.maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon {
+   background-image: url('/resources/img/icon-menos.png');
+   background-size: 15px;
+}
+</style>
+</h:head>
+<h:body>
+   <ui:include src="/pages/templates/menu.xhtml" />
+   <div class="main">
+      <div class="amigos ">
+         <h:form styleClass="menu-amigos">
+            <div class="menu-amigos-header">
+               <div class="menu-amigos-header-cima">
+                  <h1>Marketplace</h1>
+                  <i class="bi bi-gear-fill"></i>
+               </div>
+               <div class="menu-input-grupo-marketplace">
+                  <i class="bi bi-search"></i>
+                  <h:inputText pt:placeholder="Pesquisar no Marketplace" />
+               </div>
+            </div>
+             <ui:include src="/pages/templates/menu-marketplace.xhtml" />
+         </h:form>
+      </div>
+      <div class="body-novo-marketplace">
+         <div class="previa" style="border-radius: 0">
+            <div class="previa-div" style="width: 100%; height: 100vh; margin-bottom: 0; border-radius: 0">
+               <div class="previa-imagem" id="divPreviaImagem" style="background-image: url(#{marketplaceProdutoBean.produto.urlAmazonS3}); border-radius: 0; background-size: cover">
+                  <div class="previa-imagem-imagem" id="imagemPrevia" style="border-radius: 0">
+                     <h:graphicImage value="#{marketplaceProdutoBean.produto.urlAmazonS3}"  id="imagem-pre2" />
+                  </div>
+               </div>
+               <div class="previa-info-mensagem" style="background-color:#242526 ">
+                  <div class="previa-info">
+                     <div class="previa-textos">
+                        <h:outputText value="#{marketplaceProdutoBean.produto.nome}" id="tituloPrevia" styleClass="cor-texto titulo-marketplace" />
+                        <h:outputText value="#{marketplaceProdutoBean.produto.preco}" id="precoPrevia" styleClass="cor-texto preco-marketplace" />
+                        <h:outputText value="Anunciado em #{marketplaceProdutoBean.produto.cidade}" id="cidade1Previa" styleClass="anuncio-marketplace" />
+                     </div>
+   
+                     <div class="previa-detalhes">
+                        <h:outputText value="Detalhes" styleClass="cor-texto preco-marketplace" />
+                        <div class="previa-vendedor-texto">
+                           <h:outputText value="Condição" styleClass="cor-texto preco-marketplace" style="font-size: 15px;" />
+                           <h:outputText value="#{marketplaceProdutoBean.produto.condicao}" styleClass="cor-texto preco-marketplace" style="font-size: 15px; font-weight: 500;"  />
+                        </div>
+                        <h:outputText value="#{marketplaceProdutoBean.produto.descricao}" id="descricaoPrevia" styleClass="cor-texto descricao-marketplace" />
+                        
+                        <div id="map" onclick="showMap()"></div>
+                        <div id="mapBody" class="page-publicar sumir">
+                           <div id="main-publicar" class="main-publicar" style="padding: 0; overflow: hidden;">
+                              <div class="publica-header">
+                                 <h:outputLabel />
+                                 <h:outputText value="Localização do classificado" />
+                                 <i onclick="showMap()" class="bi bi-x-lg"></i>
+                              </div>
+                              <div class="publicar-body">
+                                 <a id="map2"></a>
+                              </div>
+                           </div>
+                        </div>
+                        
+                        <h:outputText value="#{marketplaceProdutoBean.produto.cidade}" id="cidade2Previa" styleClass="cor-texto descricao-marketplace" />
+                        <h:outputText value="A localização é aproximada" id="localizaPrevia" styleClass="anuncio-marketplace" />
+                     </div>
+   
+                     <div class="previa-vendedor">
+                        <div class="previa-vendedor-texto">
+                           <h:outputText value="Informações do vendedor" styleClass="cor-texto preco-marketplace" style="width: 120px;" />
+                           <h:outputText value="Detalhes do vendedor" styleClass="anuncio-marketplace" style="font-size: 15px; width: 120px;" />
+                        </div>
+   
+                        <div class="publicar-body">
+                           <h:graphicImage value="#{marketplaceProdutoBean.produto.usuario.fotoMiniatura != null ? marketplaceProdutoBean.produto.usuario.fotoMiniatura : '/resources/img/sem-perfil.png' }" width="40" height="40"
+                              style="object-fit: cover" />
+                           <h:outputText value="#{marketplaceProdutoBean.produto.usuario.nome}" />
+                        </div>
+                     </div>
+                  </div>
+                  <div class="publicacao-mensagem">
+                     <div class="publicacao-mensagem-titulo cor-texto descricao-marketplace">
+                        <i class="bi bi-messenger"></i>
+                        <h:outputText value="Envie uma mensagem ao vendedor" />
+                     </div>
+                     <h:inputText id="inputMensagem" styleClass="publicacao-mensagem-input cor-texto preco-marketplace" style="font-size: 14px;" value="Oi, #{marketplaceProdutoBean.produto.usuario.nome}. Esse item ainda está disponível?" />
+                     <h:commandButton onclick="enviarMensagem()" value="Enviar" styleClass="botao-perfil bg-azul sem-borda" style="width: 100%; justify-self: center; display: block;" />
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+   <script>
+
+         function showMap() {
+            const mapBody = document.getElementById('mapBody');
+            mapBody.classList.toggle("sumir");
+         }
+         const map = new maplibregl.Map({
+             container: 'map', // container id
+             style: 'https://api.maptiler.com/maps/c19f1471-5c8a-449c-b2bf-a9e3e3d8509b/style.json?key=TJpiltKFXP4oPsI7q9T0',
+             center: [#{marketplaceProdutoBean.produto.longitude}, #{marketplaceProdutoBean.produto.latitude}], // starting position [lng, lat]
+             zoom: 14, // starting zoom
+             interactive: false
+           });
+
+         const map2 = new maplibregl.Map({
+             container: 'map2', // container id
+             style: 'https://api.maptiler.com/maps/c19f1471-5c8a-449c-b2bf-a9e3e3d8509b/style.json?key=TJpiltKFXP4oPsI7q9T0',
+             center: [#{marketplaceProdutoBean.produto.longitude}, #{marketplaceProdutoBean.produto.latitude}], // starting position [lng, lat]
+             zoom: 14, // starting zoom
+           });
+         
+           map2.addControl(new maplibregl.NavigationControl(), 'top-left');
+           
+           const marker = new maplibregl.Marker()
+           .setLngLat([#{marketplaceProdutoBean.produto.longitude}, #{marketplaceProdutoBean.produto.latitude}])
+           .addTo(map);
+
+           const marker2 = new maplibregl.Marker()
+           .setLngLat([#{marketplaceProdutoBean.produto.longitude}, #{marketplaceProdutoBean.produto.latitude}])
+           .addTo(map2);
+
+           function salvarMensagem(mensagemInput) {
+        	    $.ajax({
+        	       type: "POST" ,
+        	       url: "/rest/chat/salvar",
+        	       headers: { 
+        		        'Accept': 'application/json',
+        		        'Content-Type': 'application/json' 
+        		 },
+        	       data: JSON.stringify({
+        	           id: null,
+        	           idPrincipal: #{homeBean.usuarioLogado.id},
+        	           idSecundario: #{marketplaceProdutoBean.produto.usuario.id},
+        	           mensagem: mensagemInput
+        	       }),
+        	       sucess: function(data) {
+        	           console.log("mensagem enviada!");
+        	       }
+        	    });
+        	}
+
+        	function enviarMensagem() {
+        	   const inputMensagem = document.getElementById("inputMensagem");
+               var mensagem = window.location.href + "\n\n" + inputMensagem.value;
+        	   salvarMensagem(mensagem);
+        	}
+
+</script>
+   <div class="notificacao" id="notificacao">
+      <div class="notificacaoPerfil">
+         <img id="notificacaoImagem" />
+         <h2 id="notificacaoNome"></h2>
+      </div>
+      <small>Mensagem: <span id="notificacaoMsg"></span></small>
+   </div>
+   <script src="/resources/js/chat.js"></script>
+</h:body>
+</html>

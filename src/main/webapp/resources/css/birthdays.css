@@ -1,0 +1,59 @@
+@charset "UTF-8";
+
+.main {
+	display: flex;
+}
+
+.body-pessoas {
+	width: 75%;
+	display: flex;
+	justify-content: center;
+	gap: 15px;
+	padding: 40px;
+}
+
+
+.pessoas-perfis {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
+.mes-aniversario {
+	border-radius: 8px;
+	width: 450px;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	padding: 20px;
+	background-color: #242526;
+}
+
+.nome-mes-aniversario {
+	font-size: 18px;
+	color: #E4E6EB;
+	font-weight: 600;
+}
+
+.nome-aniversariantes {
+	display: flex;
+	font-size: 16px;
+	color: #E4E6EB;
+	
+}
+
+.nome-aniversariantes a {
+	color: #E4E6EB;
+	text-decoration: none;
+}
+
+.fotos-aniversariantes {
+	display: flex;
+	gap: 6px;
+}
+
+.fotos-aniversariantes img {
+	margin-top: 15px;
+	border-radius: 50px
+}
+

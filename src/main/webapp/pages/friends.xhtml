@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+		xmlns:f="http://java.sun.com/jsf/core" 
+		xmlns:c="http://java.sun.com/jstl/core"
+		xmlns:h="http://java.sun.com/jsf/html" 
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+		xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+	<title>Amigos | Facebook</title>
+	<link rel="icon" type="image/x-icon" href="https://static.xx.fbcdn.net/rsrc.php/yD/r/d4ZIVX-5C-b.ico"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
+	<link rel="StyleSheet" href="/resources/css/default.css"/>
+	<link rel="StyleSheet" href="/resources/css/menu.css"/>
+	<link rel="StyleSheet" href="/resources/css/menu-lateral-paginas.css"/>	
+	<link rel="StyleSheet" href="/resources/css/friends.css"/>
+</h:head>
+<h:body>
+	<ui:include src="/pages/templates/menu.xhtml"/>
+	<div class="main">
+		<div class="amigos">
+			<ui:include src="/pages/templates/menu-amigos.xhtml"/>
+		</div>
+		<h:panelGroup layout="block" styleClass="body-pessoas" rendered="#{friendsBean.sugestoes.size() ne 0}">
+			<h:form id="amigos">
+				<div class="body-pessoas-header">
+					<h1>Pessoas que você talvez conheça</h1>
+					<h:commandLink value="Ver todos" />
+				</div>
+				<div class="pessoas-perfis">
+					<ui:repeat id="perfisList" value="#{friendsBean.sugestoes}" var="usuario" varStatus="idPerfil">
+						<div id="perfil#{usuario.id}" class="perfil">
+							<h:graphicImage value="#{usuario.fotoPerfil ne null ? usuario.fotoPerfil : '/resources/img/sem-perfil.png'}" width="100%" />
+							<h:outputText styleClass="perfil-nome" value="#{usuario.nome}" />
+							<!-- <div class="perfis-em-comum">
+								<div>
+									<h:graphicImage value="https://github.com/vitorcelio.png" width="18" />
+									<h:graphicImage value="https://github.com/vitorcelio.png" width="18" />
+								</div>
+								<h:outputText value="3 amigos em comum" />
+							</div> -->
+							<div class="botoes-perfil">
+								<h:commandButton type="button" id="add" styleClass="botao-adicionar #{friendsBean.solicitado(usuario.id) eq true ? 'invisivel' : null}" value="Adicionar" onclick="adicionar(this, #{usuario.id}, #{idPerfil.index})">
+									<f:ajax event="click" render="@form" />
+								</h:commandButton>
+								<h:commandButton type="button" id="remove" styleClass="botao-remover #{friendsBean.solicitado(usuario.id) eq true ? 'sumir' : null}" value="Remover" onclick="remover(#{usuario.id})"/>
+								<h:commandButton type="button" id="cancela" styleClass="botao-remover #{friendsBean.solicitado(usuario.id) eq true ? null : 'sumir'}" value="Cancelar" onclick="cancelar(this, #{usuario.id}, #{idPerfil.index})"/>
+							</div>
+						</div> 
+					 </ui:repeat>
+				</div>
+			</h:form>
+		</h:panelGroup>
+		<h:panelGroup layout="block" styleClass="body-solicitacoes" rendered="#{friendsBean.sugestoes.size() eq 0}">
+			<h:graphicImage library="img" name="sem-conteudo.svg" width="120"/>
+			<h1>Quando você tiver solicitações ou sugestões de amizades, você as verá aqui.</h1>
+		</h:panelGroup>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script>
+		function adicionar(botao, id, index) {
+			const botaoRemover = document.getElementById('amigos:perfisList:'+index+':remove');
+			const botaoCancelar = document.getElementById('amigos:perfisList:'+index+':cancela');
+
+			$.ajax({
+				type: "POST",
+				url: "/rest/friends/solicitacao/" + id + "/" + #{homeBean.usuarioLogado.id},
+				contentType: "application/json",
+				data: null,
+				success: function(data) {
+					botao.classList.add('invisivel');
+					botaoRemover.classList.add('sumir');
+					botaoCancelar.classList.remove('sumir');
+				}
+			});
+		}
+
+		function remover(id) {
+			const perfil = document.getElementById('perfil' + id);
+			perfil.classList.add('sumir');
+		}
+
+		function cancelar(botao, id, index) {
+			const botaoAdicionar = document.getElementById('amigos:perfisList:'+index+':add');
+			const botaoRemover = document.getElementById('amigos:perfisList:'+index+':remove');
+
+			$.ajax({
+				type: "POST",
+				url: "/rest/friends/retirarsolicitacao/" + id + "/" + #{homeBean.usuarioLogado.id},
+				contentType: "application/json",
+				data: null,
+				success: function(data) {
+					botao.classList.add('sumir');
+					botaoAdicionar.classList.remove('invisivel');
+					botaoRemover.classList.remove('sumir');
+				}
+			});
+		}
+	</script>
+   <div class="notificacao" id="notificacao">
+      <div class="notificacaoPerfil">
+         <img id="notificacaoImagem" />
+         <h2 id="notificacaoNome"></h2>
+      </div>
+      <small>Mensagem: <span id="notificacaoMsg"></span></small>
+   </div>
+   <script src="/resources/js/chat.js"></script>
+</h:body>
+</html>

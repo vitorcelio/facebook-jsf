@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+		xmlns:f="http://java.sun.com/jsf/core" 
+		xmlns:h="http://java.sun.com/jsf/html" 
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+		xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+	<title>Facebook - entre ou cadastre-se</title>
+	<link rel="icon" type="image/x-icon" href="https://static.xx.fbcdn.net/rsrc.php/yD/r/d4ZIVX-5C-b.ico"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
+	<link rel="StyleSheet" href="/resources/css/default.css"/>
+	<link rel="StyleSheet" href="/resources/css/cadastre.css"/>
+</h:head>
+<h:body>
+		<div class="body-cadastro">
+			<div class="box-form-cadastro">
+				<h:form layout="block" styleClass="box-header">
+					<div class="titulo">
+						<h1>Cadastre-se</h1>
+						<p>É rápido e fácil</p>
+					</div>
+					<h:commandLink styleClass="botaoFechar" action="login?faces-redirect=true">
+						<i class="bi bi-x-lg"/>
+					</h:commandLink>
+				</h:form>
+				<hr style="border:1px solid #DADDE1; background-color: #DADDE1"/>
+				<h:form layout="block" styleClass="box-body" autocomplete="false">
+					<div class="nome-sobrenome">
+						<div class="input-message">
+							<h:inputText value="#{cadastroBean.usuario.nome}" styleClass="input" pt:placeholder="Nome" id="nome" autocomplete="off" >
+								<f:ajax execute="nome" render="nomeMensagem" event="change"/>
+							</h:inputText>
+							<h:message id="nomeMensagem" for="nome" styleClass="erroText"/>
+						</div>
+						<div class="input-message">
+							<h:inputText value="#{cadastroBean.usuario.sobrenome}" styleClass="input" pt:placeholder="Sobrenome" id="sobrenome" autocomplete="off">
+								<f:ajax execute="sobrenome" render="sobrenomeMensagem" event="change"/>
+							</h:inputText>
+							<h:message id="sobrenomeMensagem" for="sobrenome" styleClass="erroText"/>
+						</div>
+					</div>
+					<h:inputText value="#{cadastroBean.usuario.email}" styleClass="input" pt:placeholder="Celular ou email" id="celularEmail" autocomplete="off">
+						<f:ajax execute="celularEmail" render="celularEmailMensagem" event="change" />
+					</h:inputText>
+					<h:message id="celularEmailMensagem" for="celularEmail" styleClass="erroText"/>
+					<h:inputSecret value="#{cadastroBean.usuario.senha}" styleClass="input" pt:placeholder="Nova Senha" id="senha" autocomplete="off">
+						<f:ajax execute="senha" render="senhaMensagem" event="change"/>
+					</h:inputSecret>
+					<h:message id="senhaMensagem" for="senha" styleClass="erroText"/>
+					<div class="combos">
+						<h:outputLabel styleClass="label-area" value="Data de nascimento"/>
+						<div class="combos-data-select">
+							<h:selectOneMenu styleClass="select-menu" value="#{cadastroBean.dia}" >
+								<f:selectItem itemValue="0" itemLabel="Dia" noSelectionOption="true"/>
+								<f:selectItem itemValue="1" />
+								<f:selectItem itemValue="2" />
+								<f:selectItem itemValue="3" />
+								<f:selectItem itemValue="4" />
+								<f:selectItem itemValue="5" />
+								<f:selectItem itemValue="6" />
+								<f:selectItem itemValue="7" />
+								<f:selectItem itemValue="8" />
+								<f:selectItem itemValue="9" />
+								<f:selectItem itemValue="10" />
+								<f:selectItem itemValue="11" />
+								<f:selectItem itemValue="12" />
+								<f:selectItem itemValue="13" />
+								<f:selectItem itemValue="14" />
+								<f:selectItem itemValue="15" />
+								<f:selectItem itemValue="16" />
+								<f:selectItem itemValue="17" />
+								<f:selectItem itemValue="18" />
+								<f:selectItem itemValue="19" />
+								<f:selectItem itemValue="20" />
+								<f:selectItem itemValue="21" />
+								<f:selectItem itemValue="22" />
+								<f:selectItem itemValue="23" />
+								<f:selectItem itemValue="24" />
+								<f:selectItem itemValue="25" />
+								<f:selectItem itemValue="26" />
+								<f:selectItem itemValue="27" />
+								<f:selectItem itemValue="28" />
+								<f:selectItem itemValue="29" />
+								<f:selectItem itemValue="30" />
+								<f:selectItem itemValue="31" />
+							</h:selectOneMenu>
+							<h:selectOneMenu styleClass="select-menu"  value="#{cadastroBean.mes}">
+								<f:selectItem itemValue="1" itemLabel="Jan" />
+								<f:selectItem itemValue="2" itemLabel="Fev" />
+								<f:selectItem itemValue="3" itemLabel="Mar" />
+								<f:selectItem itemValue="4" itemLabel="Abr" />
+								<f:selectItem itemValue="5" itemLabel="Mai" />
+								<f:selectItem itemValue="6" itemLabel="Jun" />
+								<f:selectItem itemValue="7" itemLabel="Jul" />
+								<f:selectItem itemValue="8" itemLabel="Ago" />
+								<f:selectItem itemValue="9" itemLabel="Set" />
+								<f:selectItem itemValue="10" itemLabel="Out" />
+								<f:selectItem itemValue="11" itemLabel="Nov" />
+								<f:selectItem itemValue="12" itemLabel="Dez" />
+							</h:selectOneMenu>
+							<h:selectOneMenu styleClass="select-menu" value="#{cadastroBean.ano}">
+								<f:selectItem itemValue="2022" />
+								<f:selectItem itemValue="2021" />
+								<f:selectItem itemValue="2020" />
+								<f:selectItem itemValue="2019" />
+								<f:selectItem itemValue="2018" />
+								<f:selectItem itemValue="2017" />
+								<f:selectItem itemValue="2016" />
+								<f:selectItem itemValue="2015" />
+								<f:selectItem itemValue="2014" />
+								<f:selectItem itemValue="2013" />
+								<f:selectItem itemValue="2012" />
+								<f:selectItem itemValue="2011" />
+								<f:selectItem itemValue="2010" />
+								<f:selectItem itemValue="2009" />
+								<f:selectItem itemValue="2008" />
+								<f:selectItem itemValue="2007" />
+								<f:selectItem itemValue="2006" />
+								<f:selectItem itemValue="2005" />
+								<f:selectItem itemValue="2004" />
+								<f:selectItem itemValue="2003" />
+								<f:selectItem itemValue="2002" />
+								<f:selectItem itemValue="2001" />
+								<f:selectItem itemValue="2000" />
+								<f:selectItem itemValue="1999" />
+								<f:selectItem itemValue="1998" />
+								<f:selectItem itemValue="1997" />
+								<f:selectItem itemValue="1996" />
+								<f:selectItem itemValue="1995" />
+								<f:selectItem itemValue="1994" />
+								<f:selectItem itemValue="1993" />
+								<f:selectItem itemValue="1992" />
+								<f:selectItem itemValue="1991" />
+								<f:selectItem itemValue="1990" />
+							</h:selectOneMenu>
+						</div>						
+					</div>
+					<div class="combos">
+						<h:outputLabel styleClass="label-area" value="Gênero"/>
+						<div class="combos-data-select select-one" >
+							<h:selectOneRadio value="#{cadastroBean.usuario.genero}" styleClass="select-one-comp">
+								<f:selectItem id="fem" itemLabel="Feminino" itemValue="Feminino" enabledClass="erroBorda" />								
+								<f:selectItem id="mas" itemLabel="Masculino" itemValue="Masculino"/>
+								<f:selectItem id="per" itemLabel="Personalizado" itemValue="Personalizado"/>
+							</h:selectOneRadio>
+						</div>						
+					</div>
+					<div class="info">
+						<p>As pessoas que usam nosso serviço podem ter carregado suas informações de contato no Facebook. Saiba mais.</p>
+						<p>Ao clicar em Cadastre-se, você concorda com nossos Termos, Política de Privacidade e Política de Cookies. Você poderá receber notificações por SMS e cancelar isso quando quiser.</p>
+					</div>
+					<div class="body-botao">
+						<h:commandButton value="Cadastre-se" styleClass="botaoCadastro" action="#{cadastroBean.cadastrar}">
+							<f:ajax execute="@form" render="@form"/>
+						</h:commandButton>
+					</div>
+				</h:form>
+			</div>
+		</div>
+</h:body>
+</html>

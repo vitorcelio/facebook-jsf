@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core"
+   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:p="http://primefaces.org/ui">
+<h:head>
+   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+   <title>Form by Vítor Célio</title>
+   <h:outputScript library="primefaces" name="jquery/jquery.js" />
+   <link rel="preconnect" href="https://fonts.googleapis.com" />
+   <link rel="preconnect" href="https://fonts.gstatic.com" />
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800" rel="stylesheet" />
+   <h:outputStylesheet library="css" name="form.css" />
+
+   <style>
+.list {
+	width: 100%;
+	max-width: 90%;
+	margin: 0 auto;
+}
+
+body .ui-datatable .ui-datatable-data>tr {
+	background: #ffffff12 !important
+}
+
+.text-h1 {
+	font-size: 24px;
+	color: white;
+	text-align: center;
+	margin: 30px 0;
+}
+</style>
+</h:head>
+<h:body styleClass="visualiza-form">
+
+   <h:form id="frm">
+
+      <p:growl id="growl" showDetail="true" styleClass="messages">
+         <p:autoUpdate />
+      </p:growl>
+
+      <h1 class="text-h1">Lista de formulários</h1>
+
+      <p:dataTable styleClass="list" id="listForms" var="form" value="#{formularioListaBean.formularioList}" rowIndexVar="index" rowKey="#{form.id}">
+
+         <p:column style="width:2rem">
+            <p:rowToggler />
+         </p:column>
+
+         <p:column headerText="Descrição">
+            <h:outputText value="#{form.descricao}" />
+         </p:column>
+
+         <p:column headerText="Texto do botão">
+            <h:outputText value="#{form.textoBotao}" />
+         </p:column>
+
+         <p:column headerText="Link" width="100px">
+            <p:linkButton target="_blank" href="http://localhost:8080/formulario/#{form.token}" icon="pi pi-external-link" />
+         </p:column>
+
+         <p:rowExpansion>
+            <p:dataTable id="listCampos" var="resposta" value="#{form.respostaIndividuais}" rowIndexVar="indexRespostas">
+               <p:column headerText="Usuário">
+                  <h:outputText value="#{resposta.token}" />
+               </p:column>
+               <p:columns value="#{form.camposList}" var="campo" headerText="#{campo.descricao}" columnIndexVar="indexCampoCol">
+                  <h:outputText value="#{resposta.respostaList.get(indexCampoCol).resposta}" />
+               </p:columns>
+            </p:dataTable>
+         </p:rowExpansion>
+
+         <f:facet name="header">
+            <p:linkButton value="Adicionar formulário" icon="pi pi-plus" href="http://localhost:8080/formulario" />
+         </f:facet>
+      </p:dataTable>
+
+
+   </h:form>
+
+   <script>
+
+
+   </script>
+</h:body>
+</html>

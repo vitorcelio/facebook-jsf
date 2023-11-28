@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+	<title>Solicitações de amizade | Facebook</title>
+	<link rel="icon" type="image/x-icon"
+		href="https://static.xx.fbcdn.net/rsrc.php/yD/r/d4ZIVX-5C-b.ico" />
+	<link rel="stylesheet"
+		href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
+	<link rel="StyleSheet" href="/resources/css/default.css" />
+	<link rel="StyleSheet" href="/resources/css/menu.css" />
+	<link rel="StyleSheet" href="/resources/css/request.css" />
+</h:head>
+<h:body>
+	<ui:include src="/pages/templates/menu.xhtml" />
+	<div class="main">
+		<div class="amigos">
+			<h:form styleClass="menu-amigos" id="form-recebidas">
+				<div class="menu-solicitacao-amigos-header">
+					<h:commandLink action="friends?faces-redirect=true">
+						<i class="bi bi-arrow-left"></i>
+					</h:commandLink>
+					<div>
+						<p>Amigos</p>
+						<h1>Solicitações de amizade</h1>
+					</div>
+				</div>
+				<ul>
+					<li class="item-menu-amigos">
+						<p>Solicitações de amizade</p>
+						<p class="solicitacao-enviada" onclick="abrirSolicitacoes()">Ver solicitações enviadas</p>
+						<h:outputText styleClass="aviso-recebidas" value="Nenhuma nova solicitação" rendered="#{friendsBean.solicitacoesRecebidas.size() eq 0}"/>
+					</li>
+					<ui:repeat id="recebidas" value="#{friendsBean.solicitacoesRecebidas}" var="recebida"  varStatus="idRecebida">
+						<li>
+							<h:commandLink styleClass="item-menu-amigos item-row">
+								<h:graphicImage value="#{recebida.fotoMiniatura ne null ? recebida.fotoMiniatura : '/resources/img/sem-perfil.png'}" width="60" />
+								<div>
+									<h:outputText value="#{recebida.nome}" />
+									<!-- <div class="perfis-em-comum">
+										<div>
+											<h:graphicImage value="https://github.com/vitorcelio.png" width="18" />
+											<h:graphicImage value="https://github.com/vitorcelio.png" width="18" />
+										</div>
+										<h:outputText value="3 amigos em comum" />
+									</div> -->
+									<div class="botoes-perfil">
+										<h:commandButton type="button" styleClass="botao-adicionar" value="Adicionar" onclick="adicionar(#{recebida.id})">
+                                                               <f:ajax event="click" execute="@this" render="@form" />
+                                                            </h:commandButton>
+										<h:commandButton type="button" styleClass="botao-remover" value="Remover" onclick="cancelar(#{recebida.id})">
+                                                               <f:ajax event="click" execute="@this" render="@form" />
+                                                            </h:commandButton>
+									</div>
+								</div>
+							</h:commandLink>
+						</li>
+					</ui:repeat>
+				</ul>
+			</h:form>
+		</div>
+		<div class="body-solicitacoes">
+			<div id="enviadasBody" class="page-solicitacoes-enviadas sumir">
+				<div id="main-publicar" class="main-solicitacoes">
+					<div class="solicitacoes-header">
+						<h:outputLabel/>
+						<h:outputText value="Solicitações enviadas" />
+						<i onclick="abrirSolicitacoes()" class="bi bi-x-lg"></i>
+					</div>
+					<div class="aviso-enviadas #{friendsBean.solicitacoesEnviadas.size() ne 0 ? 'sumir' : null}">
+						<h:outputText value="Quando você enviar uma solicitação de amizade para alguém, ela aparecerá aqui." />
+					</div>
+					<h:outputText value="#{friendsBean.solicitacoesEnviadas.size()} #{friendsBean.solicitacoesEnviadas.size() eq 1 ? 'solicitação enviada' : 'solicitações enviadas'} " styleClass="enviadas-titulo" rendered="#{friendsBean.solicitacoesEnviadas.size() ne 0}"/>
+					<h:form id="form-enviadas" styleClass="enviadas-body" rendered="#{friendsBean.solicitacoesEnviadas.size() ne 0}">
+						<ui:repeat var="enviada" value="#{friendsBean.solicitacoesEnviadas}" id="enviadas" varStatus="idEnviada">
+						<div class="perfil-enviadas-body">
+							<div class="enviadas-esquerda">
+								<h:graphicImage value="#{enviada.fotoMiniatura ne null ? enviada.fotoMiniatura : '/resources/img/sem-perfil.png'}" width="60" styleClass="img-redonda"/>
+								<div>
+									<h:outputText value="#{enviada.nome}" styleClass="enviadas-nome"/>
+									<!-- <div class="perfis-em-comum" id="perfil-em-comum#{enviada.id}">
+										<div>
+											<h:graphicImage value="https://github.com/vitorcelio.png" width="18" styleClass="img-redonda"/>
+											<h:graphicImage value="https://github.com/vitorcelio.png" width="18" styleClass="img-redonda"/>
+										</div>
+										<h:outputText value="3 amigos em comum" />
+									</div> -->
+									<p id="solicitaCancelada#{enviada.id}" class="sumir aviso-recebidas padding-5">Solicitação cancelada</p>
+								</div>
+							</div>
+							<h:commandButton type="button" id="botao-enviada" value="Cancelar solicitação" styleClass="botao-solicitacao-enviada" onclick="cancelar(#{enviada.id}, #{idEnviada.index})"/>
+						</div>
+						</ui:repeat>
+					</h:form>
+				</div>
+			</div>
+			<h:graphicImage library="img" name="sem-conteudo.svg" width="120"/>
+			<h1>Quando você tiver solicitações ou sugestões de amizades, você as verá aqui.</h1>
+		</div>
+	</div>
+	<script src="/resources/js/request.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script>
+		function cancelar(id) {
+			
+			$.ajax({
+				type: "POST",
+				url: "/rest/friends/retirarsolicitacao/" + id + "/" + #{homeBean.usuarioLogado.id},
+				contentType: "application/json",
+				data: null,
+				success: function(data) {
+                           console.log("solicitação retirada");
+				}
+			});
+		}
+
+		function adicionar(id) {
+			$.ajax({
+				type: "POST",
+				url: "/rest/friends/solicitacao/" + id + "/" + #{homeBean.usuarioLogado.id},
+				contentType: "application/json",
+				data: null,
+				success: function(data) {
+					console.log("solicitação enviada");
+				}
+			});
+		}
+	</script>
+     <div class="notificacao" id="notificacao">
+      <div class="notificacaoPerfil">
+         <img id="notificacaoImagem" />
+         <h2 id="notificacaoNome"></h2>
+      </div>
+      <small>Mensagem: <span id="notificacaoMsg"></span></small>
+   </div>
+   <script src="/resources/js/chat.js"></script>
+</h:body>
+</html>

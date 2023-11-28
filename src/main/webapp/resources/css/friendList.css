@@ -1,0 +1,148 @@
+.main-friend-list {
+	display: flex;
+}
+
+.menu-amigos ul {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	height: 75vh
+}
+
+.menu-amigos ul::-webkit-scrollbar {
+	background-color: transparent !important;
+	/* color of the tracking area */
+	width: 10px !important;
+}
+
+.menu-amigos ul::-webkit-scrollbar-thumb {
+	border-radius: 50px;
+	background: #6B6C6E !important; /* color of the scroll thumb */
+}
+
+.item-menu-amigos {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	text-decoration: none;
+	padding: 6px;
+	border-radius: 6px;
+	color: #E4E6EB;
+	font-weight: 600;
+}
+
+.item-menu-amigos:hover {
+	background-color: #363738;
+}
+
+.item-menu-amigos img {
+	border-radius: 50px;
+}
+
+.item-menu-amigos>div {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 15px;
+}
+
+.item-menu-amigos div>p {
+	font-size: 12px;
+	color: #ABAEB2;
+}
+
+.nome-amigos {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+.menu-solicitacao-amigos-header {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px 0;
+	border-bottom: 1px solid #3A3B3C;
+}
+
+.menu-solicitacao-amigos-header a {
+	font-size: 20px;
+	text-decoration: none;
+	color: #b0b3b8;
+	padding: 5px;
+	border-radius: 50px;
+}
+
+.menu-solicitacao-amigos-header a:hover {
+	background-color: #3A3B3C;
+}
+
+.ativo-edit{
+	background-color: #3A3B3C;
+	color: white !important;
+}
+
+.ativo-edit:hover{
+	background-color: #757575 !important;
+}
+
+.menu-solicitacao-amigos-header div {
+	display: flex;
+	flex-direction: column;
+}
+
+.menu-solicitacao-amigos-header p {
+	font-size: 12px;
+	color: #b0b3b8;
+}
+
+.menu-solicitacao-amigos-header h1 {
+	font-size: 23px;
+	color: #E4E6EB;
+}
+
+.li-input-grupo {
+	padding-bottom: 10px;
+	border-bottom: 1px solid #3A3B3C;
+}
+
+.main-perfil {
+	background-color: #242526;
+	margin-bottom: 20px;
+	width: 100%;
+	top: 0;
+}
+
+.botao-perfil {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 10px;
+	text-decoration: none;
+	font-weight: 600;
+	color: #E4E6EB;
+	cursor: pointer;
+	border-radius: 6px;
+	font-size: 14px;
+}
+
+.menu-perfil-input {
+	border: none;
+	padding: 18px 10px;
+	margin: 2px 0;
+	text-align: center;
+	color: #b0b3b8;
+	background-color: transparent;
+	font-size: 15px;
+	font-weight: 600;
+	cursor: pointer;
+	border-radius: 6px;
+}
+
+.menu-perfil-input:hover {
+	background-color: #3A3B3C;
+}
+
+.amigos-em-comum {
+	font-size: 13px;
+}

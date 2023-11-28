@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<pretty-config
+	xmlns="http://ocpsoft.org/prettyfaces/3.3.3"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://ocpsoft.org/schema/rewrite-config-prettyfaces
+                      http://ocpsoft.org/xml/ns/prettyfaces/rewrite-config-prettyfaces.xsd">
+
+	<url-mapping id="formulario">
+		<pattern value="/formulario" />
+		<view-id value="/formulario.jsf" />
+	</url-mapping>
+	
+	<url-mapping id="formulario">
+		<pattern value="/formulario/#{idForm}" />
+		<view-id value="/formularioItem.jsf" />
+	</url-mapping>
+	
+	<url-mapping id="formularioList">
+		<pattern value="/formularioList" />
+		<view-id value="/formularioList.jsf" />
+	</url-mapping>
+	
+	<url-mapping id="formularioMe">
+		<pattern value="/formularioMe" />
+		<view-id value="/formularioMe.jsf" />
+	</url-mapping>
+
+	<url-mapping id="login">
+		<pattern value="/login" />
+		<view-id value="/login.jsf" />
+	</url-mapping>
+
+	<url-mapping id="register">
+		<pattern value="/register" />
+		<view-id value="/cadastre.jsf" />
+	</url-mapping>
+
+	<url-mapping id="chat">
+		<pattern value="/messages/t/#{username}" />
+		<view-id value="/pages/chat.jsf" />
+	</url-mapping>
+
+	<url-mapping id="home">
+		<pattern value="/home" />
+		<view-id value="/pages/home.jsf" />
+	</url-mapping>
+
+	<url-mapping id="friends">
+		<pattern value="/friends" />
+		<view-id value="/pages/friends.jsf" />
+	</url-mapping>
+
+	<url-mapping id="friendsList">
+		<pattern value="/friends/list" />
+		<view-id value="/pages/friendsList.jsf" />
+	</url-mapping>
+
+	<url-mapping id="requests">
+		<pattern value="/friends/requests" />
+		<view-id value="/pages/requests.jsf" />
+	</url-mapping>
+
+	<url-mapping id="suggestions">
+		<pattern value="/friends/suggestions" />
+		<view-id value="/pages/suggestions.jsf" />
+	</url-mapping>
+
+	<url-mapping id="birthdays">
+		<pattern value="/friends/birthdays" />
+		<view-id value="/pages/birthdays.jsf" />
+	</url-mapping>
+
+	<url-mapping id="marketplace">
+		<pattern value="/marketplace" />
+		<view-id value="/pages/marketplace.jsf" />
+	</url-mapping>
+
+	<url-mapping id="marketplaceCategoria">
+		<pattern value="/marketplace/category/#{categoria}" />
+		<view-id value="/pages/marketplaceCategoria.jsf" />
+	</url-mapping>
+
+	<url-mapping id="marketplaceCreate">
+		<pattern value="/marketplace/create" />
+		<view-id value="/pages/marketplaceCreate.jsf" />
+	</url-mapping>
+
+	<url-mapping id="marketplaceCreateItem">
+		<pattern value="/marketplace/create/item" />
+		<view-id value="/pages/marketplaceCreateItem.jsf" />
+	</url-mapping>
+
+	<url-mapping id="profile">
+		<pattern value="/#{username}" />
+		<view-id value="/pages/profile.jsf" />
+	</url-mapping>
+
+	<url-mapping id="marketplaceItem">
+		<pattern value="/marketplace/item/#{token}" />
+		<view-id value="/pages/marketplaceItem.jsf" />
+	</url-mapping>
+
+</pretty-config>

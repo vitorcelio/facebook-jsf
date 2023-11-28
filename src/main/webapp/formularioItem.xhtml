@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core"
+   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:p="http://primefaces.org/ui">
+<h:head>
+   <f:metadata>
+      <f:viewParam name="idForm" value="#{formularioItemBean.idForm}" id="idForm" />
+   </f:metadata>
+   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+   <title>Form by Vítor Célio</title>
+   <h:outputScript library="primefaces" name="jquery/jquery.js" />
+   <link rel="preconnect" href="https://fonts.googleapis.com" />
+   <link rel="preconnect" href="https://fonts.gstatic.com" />
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800" rel="stylesheet" />
+   <h:outputStylesheet library="css" name="form.css" />
+</h:head>
+<h:body>
+
+   <h:form id="frm">
+      <p:growl id="growl" showDetail="true" styleClass="messages">
+         <p:autoUpdate />
+      </p:growl>
+
+      <h:panelGroup layout="block" id="form-builder" styleClass="form-builder">
+         <p:commandButton style="display: none;" action="#{formularioItemBean.buscarFormulario()}" id="btn-form-carregar" value="Abrir Formulário" />
+
+         <div class="visualiza-form">
+            <h:panelGroup layout="block" id="form-criado" styleClass="form-criado">
+
+               <h:panelGroup id="imgForm" styleClass="imagem-form">
+                  <h:graphicImage rendered="#{formularioItemBean.formulario.imagemAtiva}" value="#{formularioItemBean.formulario.imagem}" />
+               </h:panelGroup>
+
+               <h1 class="title">
+                  <h:outputText id="title-form-criado" value="#{formularioItemBean.formulario.descricao}" />
+               </h1>
+
+               <div id="elementos-form" class="elementos-form"></div>
+
+               <p:commandButton onclick="salvarForm();" type="button" value="#{formularioItemBean.formulario.textoBotao}" id="botaoForm" styleClass="btn-form" />
+
+            </h:panelGroup>
+
+            <a href="https://vitucelio.dev.br" target="_blank" class="criado-por"> <span>Criado por Vítor Célio</span></a>
+         </div>
+      </h:panelGroup>
+   </h:form>
+
+
+   <h:form>
+      <p:remoteCommand name="salvarRespostas" process="@this" id="salvarRespostas" actionListener="#{formularioItemBean.salvarRespostas}" />
+   </h:form>
+
+
+   <h:outputScript library="js" name="form.js" />
+   <script>
+
+      $(window).on("load", function(){
+   	     document.getElementById("frm:btn-form-carregar").click();
+   	  });
+
+   </script>
+</h:body>
+</html>

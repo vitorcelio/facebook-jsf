@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+		xmlns:f="http://java.sun.com/jsf/core" 
+		xmlns:h="http://java.sun.com/jsf/html" 
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+		xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+   <link rel="StyleSheet" href="/resources/css/notificacao.css" />
+   <script>
+// Configurações do recebimento da minha notificação
+   var uriMeuUsuario = "ws://localhost:8080/notificacao/" + '#{chatBean.urlMeuUsuario()}';
+   var usernameBack = "#{homeBean.usuarioLogado.username}";
+   </script>
+</h:head>
+<h:body >
+	<h:form styleClass="menu-lateral">
+			<ul>
+				<li>
+					<h:commandLink styleClass="item-menu-lateral" action="#{profileBean.redirecionarPerfil(homeBean.usuarioLogado.username)}">
+						<h:graphicImage value="#{homeBean.usuarioLogado.fotoMiniatura != null ? homeBean.usuarioLogado.fotoMiniatura : '/resources/img/sem-perfil.png' }" width="28" height="28" style="object-fit: cover" styleClass="img-redondo"/>
+						<h:outputText value="#{homeBean.usuarioLogado.nome}" />
+					</h:commandLink>
+				</li>
+				<li>
+					<h:commandLink styleClass="item-menu-lateral" action="friends?faces-redirect=true">
+						<h:graphicImage value="https://static.xx.fbcdn.net/rsrc.php/v3/y8/r/S0U5ECzYUSu.png" width="28" />
+						<h:outputText value="Encontrar amigos" />
+					</h:commandLink>
+				</li>
+				<li>
+					<h:commandLink styleClass="item-menu-lateral">
+						<h:graphicImage value="https://static.xx.fbcdn.net/rsrc.php/v3/y5/r/PrjLkDYpYbH.png" width="28" />
+						<h:outputText value="Grupos" />
+					</h:commandLink>
+				</li>
+				<li>
+					<h:commandLink styleClass="item-menu-lateral" action="marketplace?faces-redirect=true">
+						<h:graphicImage value="https://static.xx.fbcdn.net/rsrc.php/v3/yU/r/D2y-jJ2C_hO.png" width="28" />
+						<h:outputText value="Marketplace" />
+					</h:commandLink>
+				</li>
+				<li>
+					<h:commandLink styleClass="item-menu-lateral">
+						<h:graphicImage value="https://static.xx.fbcdn.net/rsrc.php/v3/yD/r/lVijPkTeN-r.png" width="28" />
+						<h:outputText value="Salvos" />
+					</h:commandLink>
+				</li>
+			</ul>
+		</h:form>
+</h:body>
+</html>

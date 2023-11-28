@@ -1,0 +1,106 @@
+@charset "UTF-8";
+
+.main {
+	display: flex;
+}
+
+.body-pessoas {
+	width: 75%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	gap: 15px;
+	padding: 50px;
+}
+
+.body-pessoas form {
+	width: 100%;
+}
+
+.body-pessoas-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.body-pessoas-header h1 {
+	font-size: 18px;
+	color: #E4E6EB;
+}
+
+.body-pessoas-header a {
+	font-size: 16px;
+	text-decoration: none;
+	color: #3572F2;
+}
+
+.pessoas-perfis {
+	display: grid;
+	grid-template-areas: "perfil perfil perfil perfil";
+	gap: 8px;
+	justify-content: flex-start
+}
+
+.perfil {
+	max-width: 220px;
+	background-color: #242526;
+	border: 1px solid #3A3B3C;
+	border-radius: 8px;
+	text-decoration: none;
+}
+
+.perfil img {
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	margin-bottom: 5px;
+	height: 220px !important;
+	object-fit: cover;
+}
+
+.perfil-nome {
+	padding: 14px;
+	font-weight: 600;
+	color: #E4E6EB;
+}
+
+.perfis-em-comum {
+	padding: 4px 14px;
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	font-size: 14px !important;
+	color: #A3B3B8;
+}
+
+.perfis-em-comum img:nth-child(2) {
+	margin-left: -5px;
+}
+
+.botoes-perfil {
+	padding: 14px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.botao-adicionar {
+	width: 100%;
+	padding: 9px;
+	border: none;
+	border-radius: 8px;
+	background-color: #263951;
+	color: #4294FF;
+	font-weight: 600;
+}
+
+.botao-remover {
+	width: 100%;
+	padding: 9px;
+	border: none;
+	border-radius: 8px;
+	background-color: #3A3B3C;
+	color: #E4E6EB;
+	font-weight: 600;
+}

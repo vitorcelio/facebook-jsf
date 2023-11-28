@@ -1,0 +1,68 @@
+@charset "UTF-8";
+
+.menu-amigos-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	color: #E4E6EB;
+}
+
+.menu-amigos-header h1 {
+	font-size: 23px;
+}
+
+.menu-amigos-header i {
+	font-size: 20px;
+	padding: 10px;
+	border-radius: 100%;
+	background-color: #3A3B3C;
+}
+
+.menu-amigos ul {
+	list-style: none;
+}
+
+.item-menu-amigos {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
+	text-decoration: none;
+	padding: 6px;
+	border-radius: 6px;
+	color: #E4E6EB;
+	font-weight: 600;
+}
+
+.item-menu-amigos:hover {
+	background-color: #363738;
+}
+
+.item-menu-amigos div {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+}
+
+.item-menu-amigos div i {
+	font-size: 20px;
+	padding: 8px;
+	border-radius: 100%;
+	background-color: #3A3B3C;
+}
+
+.item-menu-amigos:hover div i {
+	background-color: #4E4F50;
+}
+
+.menu-amigos-ativo {
+	background-color: #3A3B3C;
+}
+
+.menu-amigos-ativo div i {
+	background-color: #1877F2;
+}
+
+.menu-amigos-ativo:hover div i {
+	background-color: #1877F2;
+}

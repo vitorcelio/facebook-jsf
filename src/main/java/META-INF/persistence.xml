@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+	<persistence-unit name="facebook"
+		transaction-type="JTA">
+
+		<jta-data-source>java:/FacebookDS</jta-data-source>
+		<class>com.facebook.jsf.modelo.Usuario</class>
+		<class>com.facebook.jsf.modelo.Publicacao</class>
+		<class>com.facebook.jsf.modelo.Curtida</class>
+		<class>com.facebook.jsf.modelo.Comentario</class>
+		<class>com.facebook.jsf.modelo.Resposta</class>
+		<class>com.facebook.jsf.modelo.Salvo</class>
+		<class>com.facebook.jsf.modelo.Colecao</class>
+		<class>com.facebook.jsf.modelo.Categoria</class>
+		<class>com.facebook.jsf.modelo.Produto</class>
+		<class>com.facebook.jsf.modelo.Amigo</class>
+		<class>com.facebook.jsf.modelo.SolicitacaoEnviada</class>
+		<class>com.facebook.jsf.modelo.SolicitacaoRecebida</class>
+		<class>com.facebook.jsf.modelo.Chat</class>
+		<class>com.facebook.jsf.modelo.Formulario</class>
+		<class>com.facebook.jsf.modelo.CampoFormulario</class>
+		<class>com.facebook.jsf.modelo.RespostaCampoFormulario</class>
+		<class>com.facebook.jsf.modelo.OpcaoCampoFormulario</class>
+		<properties>
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.show_sql" value="false" />
+		</properties>
+	</persistence-unit>
+</persistence>

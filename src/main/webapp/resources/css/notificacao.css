@@ -1,0 +1,39 @@
+.notificacao {
+	cursor: pointer;
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	width: 100%;
+	max-width: 300px;
+	background: #3A3B3C;
+	border: 1px solid #9EA9B0;
+	transition: all .3s;
+	z-index: 999;
+	transform: translateX(500px);
+	padding: 10px;
+	border-radius: 5px;
+}
+
+.notificacao .notificacaoPerfil {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.notificacao .notificacaoPerfil img {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.notificacao .notificacaoPerfil h2 {
+	color: white;
+	font-size: 16px;
+}
+
+.notificacao small {
+	display: block;
+	margin-top: 10px;
+	color: #9EA9B0;
+}

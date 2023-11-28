@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core"
+   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+   <f:metadata>
+      <f:viewParam name="username" value="#{chatBean.username}" id="username" />
+      <f:viewAction action="#{chatBean.carregarChat()}" if="#{param['username'] != null}" />
+   </f:metadata>
+   <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+   <title>Messenger | Facebook</title>
+   <link rel="icon" type="image/x-icon" href="https://static.xx.fbcdn.net/rsrc.php/yD/r/d4ZIVX-5C-b.ico" />
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
+   <link rel="StyleSheet" href="/resources/css/default.css" />
+   <link rel="StyleSheet" href="/resources/css/menu.css" />
+   <link rel="StyleSheet" href="/resources/css/friendList.css" />
+   <link rel="StyleSheet" href="/resources/css/chat.css" />
+   <link rel="StyleSheet" href="/resources/css/notificacao.css" />
+   <script type="text/javascript">
+
+   // Configurações do recebimento da minha notificação
+   var uriMeuUsuario = "ws://localhost:8080/notificacao/" + '#{chatBean.urlMeuUsuario()}';
+   var usernameBack = "#{homeBean.usuarioLogado.username}";
+
+   // Configuração do envio de mensagens pelo chat
+function salvarMensagem(mensagemInput) {
+   $.ajax({
+    type: "POST" ,
+    url: "/rest/chat/salvar",
+    headers: { 
+     'Accept': 'application/json',
+     'Content-Type': 'application/json' 
+   },
+    data: JSON.stringify({
+        id: null,
+        idPrincipal: #{homeBean.usuarioLogado.id},
+        idSecundario: #{chatBean.usuario.id},
+        mensagem: mensagemInput
+    }),
+    sucess: function(data) {
+        console.log("mensagem enviada!");
+    }
+   });
+}
+   
+var websocketMsg;
+function connect() {
+   var uri = "ws://localhost:8080/chatprivado/" + '#{chatBean.gerarUrlWebSocket()}';
+   
+   websocketMsg = new WebSocket(uri);
+   
+   websocketMsg.onopen = function(event) {
+      console.log("Abrindo ws mensagem");
+    };
+   
+    websocketMsg.onerror = function(event) {
+        console.log("Fechando ws mensagem");
+    };
+   
+    websocketMsg.onmessage = function(event) {
+        var json = JSON.parse(event.data);
+        var chatMensagens = document.getElementById("chatMensagens");
+   
+        if(json.username == "#{homeBean.usuarioLogado.username}") {
+           chatMensagens.innerHTML += '<span class="mensagem-envio quebra mensagem-minha">'+ json.mensagem +'</span>';
+        } else {
+     	   chatMensagens.innerHTML += '<span class="mensagem-envio quebra">'+ json.mensagem +'</span>';
+        }
+    };
+}
+
+   //envia a mensagem pro servidor
+function sendMensagem(event) {
+   event.preventDefault();
+   
+   var usernameBack = "#{homeBean.usuarioLogado.username}";
+   var usernameChat = "#{chatBean.username}";
+   var text = document.getElementById("frm:inputMensagem").value;
+   
+   if(text.trim() !== '') {
+      var conteudoJson = {
+           "mensagem" : text, 
+           "data" : Date.now().toString(), 
+           "username" : "#{homeBean.usuarioLogado.username}",
+           "nome" : "#{homeBean.usuarioLogado.nome}", 
+           "imagem" : "#{homeBean.usuarioLogado.fotoMiniatura}"
+      };
+      websocketMsg.send(JSON.stringify(conteudoJson));
+      salvarMensagem(text);
+
+      if(usernameBack != usernameChat){
+         sendNotificacao(text);
+      }
+   }
+   
+   document.getElementById("frm:inputMensagem").value = "";
+}
+
+function closeWebsocket() {
+   //fecha a conexão do websocket
+   websocketMsg.close();
+}
+
+//Configuração do envio de notificação
+var websocketNot;
+function connectNotificacao() {
+   var uri = "ws://localhost:8080/notificacao/" + '#{chatBean.gerarUrlNotificacao()}';
+       
+   websocketNot = new WebSocket(uri);
+   
+   websocketNot.onopen = function(event) {
+      console.log("Abrindo ws notificação");
+   };
+   
+   websocketNot.onerror = function(event) {
+      console.log("Fechando ws notificação");
+   };
+   
+   websocketNot.onmessage = function(event) {
+      var json = JSON.parse(event.data);   
+      mostrarNotificacao(json);
+   };
+}
+
+function sendNotificacao(text) {
+   if(text.trim() !== '') {
+        var conteudoJson = {
+        "mensagem" : text, 
+        "data" : Date.now().toString(), 
+        "username" : "#{homeBean.usuarioLogado.username}", 
+        "nome" : "#{homeBean.usuarioLogado.nome}", 
+        "imagem" : "#{homeBean.usuarioLogado.fotoMiniatura}"
+      };
+      
+        websocketNot.send(JSON.stringify(conteudoJson));
+   }
+}
+
+
+   // Conectando websocket ao carregar página
+window.onload = function() {
+
+   connect();
+   connectNotificacao();
+};
+</script>
+</h:head>
+<h:body style="background-color: #242526; position: relative; overflow: hidden;">
+   <ui:include src="/pages/templates/menu.xhtml" />
+   <div class="main-friend-list">
+      <div class="amigos">
+         <h:form styleClass="menu-amigos" id="frm-amigos">
+            <div class="menu-solicitacao-amigos-header" style="justify-content: space-between;">
+               <div>
+                  <h1>Bate-papos</h1>
+               </div>
+               <h:commandLink action="friends?faces-redirect=true" styleClass="ativo-edit">
+                  <i class="bi bi-pencil-square"></i>
+               </h:commandLink>
+            </div>
+            <div class="li-input-grupo">
+               <div class="menu-input-grupo">
+                  <i class="bi bi-search"></i>
+                  <h:inputText pt:placeholder="Pesquisar no messenger" binding="#{chatBean.nomesAmigos}">
+                     <f:ajax execute="@this" event="keyup" render="listAmigos" listener="#{chatBean.consultarAmigos}" />
+                  </h:inputText>
+               </div>
+            </div>
+            <h:panelGroup layout="block" id="listAmigos">
+               <ul>
+                  <li class="item-menu-amigos">
+                     <p>#{chatBean.amigos.size()} amigos</p>
+                  </li>
+                  <li><h:commandLink styleClass="item-menu-amigos cursor-pointer" action="#{menuBean.redirecionarMesssenger(homeBean.usuarioLogado.username)}">
+                        <div>
+                           <h:graphicImage value="#{homeBean.usuarioLogado.fotoMiniatura ne null ? homeBean.usuarioLogado.fotoMiniatura : '/resources/img/sem-perfil.png'}" width="60" height="60"
+                              style="object-fit: cover" />
+                           <div class="nome-amigos">
+                              <h:outputText value="#{homeBean.usuarioLogado.nome} (você)" />
+                              <!-- <p>
+                                    <h:outputText value="Olá, tudo bem?" />
+                                 </p> -->
+                           </div>
+                        </div>
+                        <i class="bi bi-three-dots"></i>
+                     </h:commandLink></li>
+                  <ui:repeat id="amigosList" var="amigo" value="#{chatBean.amigos}" varStatus="amigoId">
+                     <li><h:commandLink styleClass="item-menu-amigos cursor-pointer" action="#{menuBean.redirecionarMesssenger(amigo.username)}">
+                           <div>
+                              <h:graphicImage value="#{amigo.fotoMiniatura ne null ? amigo.fotoMiniatura : '/resources/img/sem-perfil.png'}" width="60" height="60" style="object-fit: cover" />
+                              <div class="nome-amigos">
+                                 <h:outputText value="#{amigo.nome}" />
+                                 <!--   <p>
+                                    <h:outputText value="Olá, tudo bem?" />
+                                 </p> -->
+                              </div>
+                           </div>
+                           <i class="bi bi-three-dots"></i>
+                        </h:commandLink></li>
+                  </ui:repeat>
+               </ul>
+            </h:panelGroup>
+         </h:form>
+      </div>
+      <h:form styleClass="body-messenger" id="frm">
+         <div class="menu-messenger">
+            <div class="menu-perfil">
+               <h:graphicImage value="#{chatBean.usuario.fotoMiniatura ne null ? chatBean.usuario.fotoMiniatura : '/resources/img/sem-perfil.png' }" width="45" height="45" style="object-fit: cover" />
+               <h:outputText value="#{chatBean.usuario.nome}" />
+            </div>
+            <div class="menu-info">
+               <i class="bi bi-info-circle-fill"></i>
+            </div>
+         </div>
+         <div class="chat-mensagens">
+            <div class="todas-mensagens" id="chatMensagens">
+               <ui:repeat var="mensagem" value="#{chatBean.mensagens}">
+                  <h:outputText value="#{mensagem.mensagem}" styleClass="mensagem-envio quebra #{mensagem.idPrincipal eq homeBean.usuarioLogado.id ? 'mensagem-minha' : null}" />
+               </ui:repeat>
+            </div>
+            <div class="chat-info">
+               <div class="chat-perfil">
+                  <h:graphicImage value="#{chatBean.usuario.fotoMiniatura ne null ? chatBean.usuario.fotoMiniatura : '/resources/img/sem-perfil.png' }" width="60" height="60" style="object-fit: cover" />
+                  <h:outputText value="#{chatBean.usuario.nome}" />
+               </div>
+               <h:outputText value="Facebook" id="facebookName" />
+               <h:outputText value="Vocês são amigos no Facebook" />
+            </div>
+         </div>
+         <div class="chat-input">
+            <div class="chat-input-item">
+               <h:inputText pt:placeholder="Aa" id="inputMensagem" onkeypress="if(event.keyCode == 13){sendMensagem(event); return false;}" />
+               <i class="bi bi-send-fill" onclick="sendMensagem(event)" />
+            </div>
+         </div>
+      </h:form>
+   </div>
+   <div class="notificacao" id="notificacao">
+      <div class="notificacaoPerfil">
+         <img id="notificacaoImagem" />
+         <h2 id="notificacaoNome"></h2>
+      </div>
+      <small>Mensagem: <span id="notificacaoMsg"></span></small>
+   </div>
+   <script src="/resources/js/chat.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</h:body>
+</html>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+   <link rel="StyleSheet" href="/resources/css/notificacao.css" />
+   <script>
+// Configurações do recebimento da minha notificação
+   var uriMeuUsuario = "ws://localhost:8080/notificacao/" + '#{chatBean.urlMeuUsuario()}';
+   var usernameBack = "#{homeBean.usuarioLogado.username}";
+   </script>
+</h:head>
+<h:body>
+   <style>
+#map3 {
+	overflow: visible;
+	width: 100%;
+	height: 300px !important;
+}
+
+#map3 canvas {
+	position: relative;
+	width: 100% !important;
+	height: 100% !important;
+	border-radius: 8px;
+}
+</style>
+   <div class="marketplace-botoes">
+      <ul>
+         <li><h:commandLink action="marketplace?faces-redirect=true" styleClass="item-menu-amigos #{menuBean.menuAmigos('/pages/marketplace.jsf') ? 'menu-amigos-ativo' : null}">
+               <div>
+                  <i class="bi bi-shop"></i>
+                  <p>Navegar por tudo</p>
+               </div>
+            </h:commandLink></li>
+         <li><h:commandLink styleClass="botao-adicionar-classificado" action="marketplaceCreate?faces-redirect=true">
+               <i class="bi bi-plus"></i>
+               <p>Criar novo classificado</p>
+            </h:commandLink></li>
+         <li>
+            <div class="filtro-marketplace">
+               <h:outputText value="Filtros" styleClass="item-marketplace-preco" />
+               <h:outputLabel onclick="showFiltro()" value="#{cidade != null ? cidade : 'Brasil'}" styleClass="filtro-marketplace-texto" id="filtroText" />
+            </div>
+            <div id="filtroBody" class="page-publicar sumir">
+               <div id="main-publicar" class="main-publicar" style="padding: 0; overflow: hidden;">
+                  <div class="publica-header">
+                     <h:outputLabel />
+                     <h:outputText value="Alterar localização" />
+                     <i onclick="showFiltro()" class="bi bi-x-lg"></i>
+                  </div>
+                  <div class="publicar-body marketplace-localiza">
+                     <div class="input-marketplace grupo-input-marketplace #{component.findComponent('cidade').valid ? null : 'erroBorda'}" style="padding: 0 !important; width: 95%" id="inputCity">
+                        <i class="bi bi-geo-alt-fill"></i>
+
+                        <h:inputText value="#{cidade}" styleClass="input-marketplace-2" pt:placeholder="Localização" id="cidade" />
+
+                        <h:commandButton action="#{actionBean[actionMethod]}" styleClass="sumir" id="buttonLocaliza">
+                           <f:ajax execute="@this cidade" event="click" render="list-localizacao" />
+                        </h:commandButton>
+
+                        <h:panelGroup layout="block" style="padding: 20px 0; background-color: #3A3B3C; cursor: pointer;" onclick="document.getElementById('frm:buttonLocaliza').click()">
+                           <i class="bi bi-search"></i>
+                        </h:panelGroup>
+                     </div>
+                     <h:panelGroup layout="block" styleClass="input-marketplace-3" id="list-localizacao" style="position: absolute; margin-top: 60px; z-index: 999;">
+
+                        <ui:repeat id="lonlatList" value="#{lonlatList}" var="geo" size="5" varStatus="lonlastId">
+                           <h:panelGroup layout="block" id="lonlat" styleClass="botaoLocalizacao">
+                              <h:commandButton action="#{actionBean[actionResetLonlat]}" styleClass="sumir" id="botaoSelectLocalizacao">
+                                 <f:setPropertyActionListener value="#{marketplaceBean.gerarLonLat(geo)}" target="#{cidade}" />
+                                 <f:setPropertyActionListener value="#{geo}" target="#{lonlat}" />
+                                 <f:ajax event="click" execute="@this" render="frm:cidade frm:list-localizacao frm:aplicarMapa" />
+                              </h:commandButton>
+
+                              <h:commandLink type="button" value="#{marketplaceBean.gerarLonLat(geo)}" styleClass="textLocalizacao"
+                                 onclick="document.getElementById('frm:lonlatList:'+#{lonlastId.index}+':botaoSelectLocalizacao').click();">
+                                 <f:ajax render="frm:cidade" />
+                              </h:commandLink>
+                           </h:panelGroup>
+                        </ui:repeat>
+
+                     </h:panelGroup>
+                     <div>
+                        <div id="map3"></div>
+                     </div>
+                     
+                     <h:commandButton action="#{actionBean[actionLonLat]}" value="Aplicar" styleClass="botao-perfil bg-azul sem-borda"
+                                 id="aplicarMapa" style="align-self: end" disabled="#{cidade eq null}" />
+                  </div>
+               </div>
+            </div>
+         </li>
+      </ul>
+      <ul class="list-categorias">
+         <li>
+            <p>Categorias</p>
+         </li>
+         <ui:repeat value="#{marketplaceBean.categorias}" var="categoria">
+            <li><h:commandLink action="#{marketplaceBean.redirectCategoria(categoria.url)}"
+                  styleClass="item-menu-amigos #{menuBean.menuProdutosCategoria(categoria.url) ? 'menu-amigos-ativo' : null}">
+                  <div>
+                     <i class="#{categoria.icone}"></i>
+                     <p>#{categoria.nome}</p>
+                  </div>
+               </h:commandLink></li>
+         </ui:repeat>
+      </ul>
+   </div>
+   <script>
+               const filtroBody = document.getElementById('filtroBody');
+               
+               function showFiltro() {
+                   filtroBody.classList.toggle('sumir');
+               }
+
+               
+
+               const map3 = new maplibregl.Map({
+                   container: 'map3', // container id
+                   style: 'https://api.maptiler.com/maps/c19f1471-5c8a-449c-b2bf-a9e3e3d8509b/style.json?key=TJpiltKFXP4oPsI7q9T0',
+                   center: [#{longitude}, #{latitude}], // starting position [lng, lat]
+                   zoom: #{zoom}, // starting zoom
+                 });
+
+               const marker = new maplibregl.Marker()
+               .setLngLat([#{longitude}, #{latitude}])
+               .addTo(map3);
+
+            </script>
+</h:body>
+</html>

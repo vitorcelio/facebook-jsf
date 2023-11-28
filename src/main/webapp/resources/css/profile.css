@@ -1,0 +1,367 @@
+@charset "UTF-8";
+
+.main {
+	background-color: #242526;
+	margin-bottom: 20px;
+}
+
+.home-perfil {
+	max-width: 900px;
+	width: 100%;
+	margin: 0 auto;
+}
+
+.capa {
+	height: 360px;
+}
+
+.capa img {
+	object-fit: cover;
+	border-bottom-left-radius: 8px;
+	border-bottom-right-radius: 8px;
+}
+
+.informacoes {
+	display: flex;
+	padding: 10px 20px;
+	align-items: center;
+	gap: 15px;
+	border-bottom: 1px solid #2F3031;
+	margin-top: -30px;
+}
+
+.informacoes img {
+	border-radius: 50%;
+	border: 5px solid #242526;
+	object-fit: cover;
+}
+
+.nomes-informacao {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.nomes-informacao>div {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+}
+
+.informacao-perfil {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.nome-completo {
+	font-size: 30px;
+	font-weight: 700;
+	color: #E4E6EB;
+}
+
+.nome-perfil {
+	font-size: 26px;
+	color: #E4E6EB;
+}
+
+.amigos-em-comum {
+	font-weight: 600;
+	color: #B0B3B8;
+}
+
+.informacao-perfil>div {
+	margin-left: 6px;
+}
+
+.informacao-perfil img {
+	margin-left: -6px;
+	border: 2px solid #242526;
+}
+
+.botoes-perfil {
+	display: flex;
+	gap: 6px;
+}
+
+.botao-perfil {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 10px;
+	text-decoration: none;
+	font-weight: 600;
+	color: #E4E6EB;
+	cursor: pointer;
+	border-radius: 6px;
+}
+
+.bg-cinza {
+	background-color: #3A3B3C;
+}
+
+.bg-azul {
+	background-color: #2374E1;
+}
+
+.menu-perfil {
+	display: flex;
+}
+
+.menu-perfil input {
+	border: none;
+	padding: 18px 10px;
+	margin: 2px 0;
+	text-align: center;
+	color: #b0b3b8;
+	background-color: transparent;
+	font-size: 15px;
+	font-weight: 600;
+	cursor: pointer;
+	border-radius: 6px;
+}
+
+.menu-perfil input:hover {
+	background-color: #3A3B3C;
+}
+
+.menu-perfil-ativo {
+	color: #2C77D7 !important;
+	border-bottom: 2px solid #2C77D7 !important;
+	border-radius: 0px !important;
+}
+
+.menu-perfil-ativo:hover {
+	background-color: transparent !important;
+}
+
+.width-editar {
+	width: 650px !important;
+	margin: 50px 0 !important;
+}
+
+.link-texto {
+	font-weight: 500 !important;
+	font-size: 16px !important;
+	color: #58A3FF !important;
+	padding: 7px !important;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.link-texto:hover {
+	background-color: #3A3B3C !important;
+}
+
+.sem-borda {
+	border-bottom: none !important;
+}
+
+.center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.sem-capa {
+	height: 165px !important;
+	width: 70% !important;
+	border-radius: 15px !important;
+	object-fit: cover;
+}
+
+.texto-biografia {
+	margin: 15px 0;
+	color: #909296;
+}
+
+.apresentacao-perfil {
+	padding: 20px 0;
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.scroll-perfil{
+	overflow-y: scroll;
+	justify-content: unset !important;
+}
+
+.sem-scroll{
+	overflow: hidden !important;
+}
+
+.menu-editar-perfil{
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	padding: 20px 0;
+}
+
+.menu-editar-perfil-item{
+	font-size: 17px;
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	border-radius: 8px;
+	padding: 5px !important;
+}
+
+.menu-editar-perfil-item i{
+	padding: 20px !important;
+}
+
+.menu-editar-perfil-item:hover{
+	background-color: #3A3B3C !important;
+}
+
+.menu-editar-perfil-item:hover i {
+	background-color: #4E4F50 !important;
+}
+
+.biografia-body{
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	width: 250px;
+}
+
+.biografia-input{
+	padding: 10px;
+	text-align: center;
+	border-radius: 8px;
+	background-color: #3A3B3C;
+	color: #DDDFE4;
+	border: none;
+	resize: none;
+	font-weight: 600;
+	height: 60px;
+	font-size: 16px;
+}
+
+.informacoes-input {
+	padding: 10px;
+	border-radius: 8px;
+	background-color: #3A3B3C;
+	color: #DDDFE4;
+	border: none;
+	font-weight: 600;
+	font-size: 16px;
+}
+
+.label-informacoes {
+	color: #DDDFE4;
+	font-weight: 600;
+	font-size: 16px;
+	margin-top: 15px;
+}
+
+.label-informacoes:disabled {
+	color: #616161;
+}
+
+.biografia-botoes{
+	width: 100%;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 8px;
+}
+
+.sem-borda{
+	border: none;
+}
+
+.botao-perfil:disabled{
+	background-color: #505151;
+	color: #838484;
+}
+
+.pre-imagens{
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.imagem-perfil-upload{
+	align-self: center;
+	border-radius: 0px !important;
+	width: 280px;
+	height: 280px;
+	object-fit: cover;
+}
+
+.imagem-capa-upload{
+	object-fit: cover;
+	width: 350px;
+	height: 180px;
+	border-radius: 10px !important;
+	align-self: center;
+}
+
+.bg-transap{
+	background-color: transparent !important;
+	color: #4294FF !important;
+}
+
+.espacos-edit-botoes{
+	padding: 20px 0 !important;
+	border-top: 1px solid #2F3031;
+}
+
+.amigos2{
+	max-width: 900px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	margin: 0 auto;
+	padding: 0 20px;
+	gap: 20px;
+}
+
+.input-marketplace-3 {
+	border: 1px solid #3e4042;
+	border-radius: 5px;
+	background-color: #242526;
+	box-shadow: 0 4px 8px 0 #18191A, 0 6px 20px 0 #18191A;
+}
+
+.botaoLocalizacao {
+	background-color: transparent;
+	border: none;
+	padding: 20px;
+	border-radius: 5px;
+}
+
+.textLocalizacao {
+	font-size: 15px;
+	font-weight: 600;
+	color: #E4E6EB !important;
+	word-wrap: break-word;
+	text-decoration: none;
+}
+
+.grupo-input-marketplace {
+	display: flex;
+	align-items: center;
+}
+
+.grupo-input-marketplace input{
+	width: 100%;
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+}
+
+.botaoPesquisar{
+	padding: 10px;
+	border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
+	border-bottom-right-radius: 8px;
+	border-top-right-radius: 8px;
+	background-color: #3A3B3C;
+	color: #DDDFE4;
+	cursor: pointer;
+}

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+		xmlns:f="http://java.sun.com/jsf/core" 
+		xmlns:h="http://java.sun.com/jsf/html" 
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+		xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+	<title>Aniversários | Facebook</title>
+	<link rel="icon" type="image/x-icon" href="https://static.xx.fbcdn.net/rsrc.php/yD/r/d4ZIVX-5C-b.ico"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
+	<link rel="StyleSheet" href="/resources/css/default.css"/>
+	<link rel="StyleSheet" href="/resources/css/menu.css"/>
+	<link rel="StyleSheet" href="/resources/css/menu-lateral-paginas.css"/>	
+	<link rel="StyleSheet" href="/resources/css/birthdays.css"/>
+</h:head>
+<h:body>
+	<ui:include src="/pages/templates/menu.xhtml"/>
+	<div class="main">
+		<div class="amigos">
+			<ui:include src="/pages/templates/menu-amigos.xhtml"/>
+		</div>
+		<div class="body-pessoas">
+			<h:form>
+				<div class="pessoas-perfis">
+					<div class="mes-aniversario">
+						<h:outputText value="julho" styleClass="nome-mes-aniversario"/>
+						<div class="nome-aniversariantes">
+							<h:commandLink value="Vítor" />,
+							<h:commandLink value="Vítor" />,
+							<h:commandLink value="Vítor" />,
+							<h:commandLink value="Vítor" /> 
+							e
+							<h:commandLink value="Vítor" /> 
+						</div>
+						<div class="fotos-aniversariantes">
+							<h:commandLink>
+								<h:graphicImage value="https://github.com/vitorcelio.png" width="60"/>
+							</h:commandLink>
+							<h:commandLink>
+								<h:graphicImage value="https://github.com/vitorcelio.png" width="60"/>
+							</h:commandLink>
+							<h:commandLink>
+								<h:graphicImage value="https://github.com/vitorcelio.png" width="60"/>
+							</h:commandLink>
+							<h:commandLink>
+								<h:graphicImage value="https://github.com/vitorcelio.png" width="60"/>
+							</h:commandLink>
+							<h:commandLink>
+								<h:graphicImage value="https://github.com/vitorcelio.png" width="60"/>
+							</h:commandLink>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</div>
+	</div>
+   <div class="notificacao" id="notificacao">
+      <div class="notificacaoPerfil">
+         <img id="notificacaoImagem" />
+         <h2 id="notificacaoNome"></h2>
+      </div>
+      <small>Mensagem: <span id="notificacaoMsg"></span></small>
+   </div>
+   <script src="/resources/js/chat.js"></script>
+</h:body>
+</html>

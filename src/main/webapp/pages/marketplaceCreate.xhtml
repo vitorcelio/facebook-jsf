@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+   <title>Facebook Marketplace | Facebook</title>
+   <link rel="icon" type="image/x-icon" href="https://static.xx.fbcdn.net/rsrc.php/yD/r/d4ZIVX-5C-b.ico" />
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
+   <link rel="StyleSheet" href="/resources/css/default.css" />
+   <link rel="StyleSheet" href="/resources/css/menu.css" />
+   <link rel="StyleSheet" href="/resources/css/marketplace.css" />
+</h:head>
+<h:body>
+   <ui:include src="/pages/templates/menu2.xhtml" />
+   <div class="main">
+      <div class="amigos ">
+         <h:form styleClass="menu-amigos amigos-menu2">
+            <div class="menu-amigos-header sem-borda-baixo">
+               <div class="menu-amigos-header-cima">
+                  <h1>Criar novo classificado</h1>
+               </div>
+            </div>
+            <div class="marketplace-botoes">
+               <ul>
+                  <li><h:commandLink styleClass="item-menu-amigos menu-amigos-ativo">
+                        <div>
+                           <i class="bi bi-tag-fill"></i>
+                           <p>Escolher tipo de classificado</p>
+                        </div>
+                     </h:commandLink></li>
+               </ul>
+               <ul class="list-categorias">
+                  <li><h:commandLink styleClass="item-menu-amigos">
+                        <div>
+                           <i class="bi bi-tags-fill"></i>
+                           <p>Seus classificados</p>
+                        </div>
+                     </h:commandLink></li>
+               </ul>
+            </div>
+         </h:form>
+      </div>
+      <div class="body-novo-marketplace">
+         <div class="opcoes-marketplace">
+            <h:outputText value="Escolher tipo de classificado" styleClass="opcoes-marketplace-texto"/>
+            <h:form styleClass="itens-opcoes-marketplace">
+               <h:commandLink styleClass="item-opcao" action="marketplaceCreateItem?faces-redirect=true" >
+                  <h:graphicImage library="img" name="novo-classificado.png" width="60" height="60" />
+                  <h:outputText value="Item para venda" styleClass="item-opcao-texto" />
+                  <h:outputText value="Crie um único anúncio para um ou mais itens à venda." styleClass="item-opcao-descricao" />
+               </h:commandLink>
+            </h:form>
+         </div>
+      </div>
+   </div>
+   <div class="notificacao" id="notificacao">
+      <div class="notificacaoPerfil">
+         <img id="notificacaoImagem" />
+         <h2 id="notificacaoNome"></h2>
+      </div>
+      <small>Mensagem: <span id="notificacaoMsg"></span></small>
+   </div>
+   <script src="/resources/js/chat.js"></script>
+</h:body>
+</html>

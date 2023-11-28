@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+   <f:metadata>
+      <f:viewParam name="categoria" value="#{marketplaceCategoriaBean.categoria}" id="categoria" />
+      <f:viewAction action="#{marketplaceCategoriaBean.buscarProdutosCategoria()}" if="#{param['categoria'] != null}" />
+   </f:metadata>
+   <title>Facebook Marketplace | Facebook</title>
+   <link rel="icon" type="image/x-icon" href="https://static.xx.fbcdn.net/rsrc.php/yD/r/d4ZIVX-5C-b.ico" />
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
+   <link rel="StyleSheet" href="/resources/css/default.css" />
+   <link rel="StyleSheet" href="/resources/css/menu.css" />
+   <link rel="StyleSheet" href="/resources/css/home.css" />
+   <link rel="StyleSheet" href="/resources/css/marketplace.css" />
+   <script src="https://cdn.maptiler.com/maplibre-gl-js/v2.2.0-pre.2/maplibre-gl.js"></script>
+   <link href="https://cdn.maptiler.com/maplibre-gl-js/v2.2.0-pre.2/maplibre-gl.css" rel="stylesheet" />
+   <style>
+   
+   #map{
+      width: 65%;
+      height: 100%;
+   }
+   
+   .marker-map {
+      background-color: #236ECF;
+      border-radius: 5px;
+      padding: 4px 8px;
+      color: white;
+      cursor: pointer;
+      position: absolute;
+   }
+   
+   .marker-map:hover{
+      background-color: black;
+   }
+   
+   .marker-map-size{
+      padding: 10px;
+      width: 10px;
+      height: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 100%;
+      background-color: #236ECF;
+      color: white;
+      cursor: pointer;
+      border: 1px solid white;
+   }
+
+   .sem-scroll {
+      overflow-y: hidden;
+   }
+   
+   .mapboxgl-ctrl-top-left .mapboxgl-ctrl, .maplibregl-ctrl-top-left .maplibregl-ctrl {
+   border: 1px solid #3A3B3C;
+   border-radius: 5px;
+}
+
+#map details {
+   display: none;
+}
+
+.maplibregl-ctrl-group button.maplibregl-ctrl-compass {
+   display: none
+}
+
+.mapboxgl-ctrl-top-left button {
+   width: 49px;
+   background-color: #242526 !important;
+}
+
+.mapboxgl-ctrl-group button+button, .maplibregl-ctrl-group button+button {
+   border-top: none;
+}
+
+.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-in .mapboxgl-ctrl-icon, .maplibregl-ctrl button.maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon {
+   background-image: url('/resources/img/icon-mais.png');
+   background-size: 15px;
+}
+
+.maplibregl-ctrl button.maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon:hover,
+.maplibregl-ctrl button.maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon:hover {
+   background-color: #3A3B3C;
+}
+
+.mapboxgl-ctrl button.mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon, .maplibregl-ctrl button.maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon {
+   background-image: url('/resources/img/icon-menos.png');
+   background-size: 15px;
+}
+
+.mapboxgl-popup-content, .maplibregl-popup-content {
+   width: 290px;
+   border-radius: 10px;
+}
+   </style>
+</h:head>
+<h:body onload="loadMapItems()" styleClass="#{marketplaceCategoriaBean.categoria eq 'propertyrentals' ? 'sem-scroll' : null}">
+   <ui:include src="/pages/templates/menu.xhtml" />
+   <div class="main">
+      <div class="amigos">
+         <h:form id="frm" styleClass="menu-amigos">
+            <div class="menu-amigos-header">
+               <div class="menu-amigos-header-cima">
+                  <h1>#{marketplaceCategoriaBean.nomeCategoria()}</h1>
+                  <i class="bi bi-gear-fill"></i>
+               </div>
+               <div class="menu-input-grupo-marketplace">
+                  <i class="bi bi-search"></i>
+                  <h:inputText pt:placeholder="Pesquisar no Marketplace" />
+               </div>
+               
+            </div>
+             <ui:include src="/pages/templates/menu-marketplace.xhtml" >
+               <ui:param name="cidade" value="#{marketplaceCategoriaBean.cidadeLocalizacao}" />
+               <ui:param name="lonlat" value="#{marketplaceCategoriaBean.lonlat}" />
+               <ui:param name="longitude" value="#{marketplaceCategoriaBean.longitude eq null ? '-50.5101178' : marketplaceCategoriaBean.longitude}" />
+               <ui:param name="latitude" value="#{marketplaceCategoriaBean.latitude eq null ? '-15.5165219' : marketplaceCategoriaBean.latitude}" />
+               <ui:param name="lonlatList" value="#{marketplaceCategoriaBean.lonlatList}" />
+               <ui:param name="actionBean" value="#{marketplaceCategoriaBean}" />
+               <ui:param name="actionMethod" value="carregarListLonLatCidadeQuery" />
+               <ui:param name="actionLonLat" value="selectLonlat" />
+               <ui:param name="actionResetLonlat" value="resetLonlat" />
+               <ui:param name="zoom" value="#{marketplaceCategoriaBean.zoom eq null ? '2' : marketplaceCategoriaBean.zoom}" />
+             </ui:include>
+         </h:form>
+      </div>
+      <h:panelGroup layout="block" id="sem-produtos" styleClass="body-solicitacoes #{marketplaceCategoriaBean.produtos.size() ne 0 ? 'sumir' : ''}">
+         <h:graphicImage value="/resources/img/sem-produto.svg" width="120" />
+         <h1 style="width: 320px; text-align: center;">Não há produtos em sua área no momento. Verifique novamente mais tarde.</h1>
+      </h:panelGroup>
+      <h:panelGroup layout="block" id="produtos" class="body-pessoas #{marketplaceCategoriaBean.produtos.size() eq 0 ? 'sumir' : ''} #{ marketplaceCategoriaBean.categoria eq 'propertyrentals' ? 'sumir' : ''}">
+         <h:form rendered="#{marketplaceCategoriaBean.categoria ne 'propertyrentals'}">
+            <div class="body-pessoas-header">
+               <h1>Seleções de hoje</h1>
+               <h:commandLink value="#{marketplaceCategoriaBean.cidadeLocalizacao != null ? marketplaceCategoriaBean.cidadeLocalizacao : 'Brasil'}" />
+            </div>
+            <div class="pessoas-perfis">
+               <ui:repeat var="produto" value="#{marketplaceCategoriaBean.produtos}">
+                  <h:commandLink action="#{marketplaceCategoriaBean.redirectProduto(produto.token)}" styleClass="item-marketplace">
+                     <div class="item-marketplace-back">
+                        <h:graphicImage value="#{produto.imagem64}" />
+                     </div>
+                     <div class="texto-item-marketplace">
+                        <h:outputText styleClass="item-marketplace-preco" value="#{produto.preco}" />
+                        <h:outputText styleClass="item-marketplace-nome" value="#{produto.nome}" />
+                        <h:outputText styleClass="item-marketplace-cidade" value="#{produto.cidade}" />
+                     </div>
+                  </h:commandLink>
+               </ui:repeat>
+            </div>
+         </h:form>
+      </h:panelGroup>
+      <h:panelGroup layout="block" id="produtos2" class="body-pessoas #{marketplaceCategoriaBean.produtos.size() eq 0 ? 'sumir' : ''} #{marketplaceCategoriaBean.categoria eq 'propertyrentals' ? '' : 'sumir'}" style="padding: 0; padding-left: 15px;">
+      <h:form styleClass="formMap" rendered="#{marketplaceCategoriaBean.categoria eq 'propertyrentals'}">
+         <div id="map"></div>
+         <div class="pessoas-perfis2">
+            <ui:repeat var="produto" value="#{marketplaceCategoriaBean.produtos}">
+                  <h:commandLink action="#{marketplaceCategoriaBean.redirectProduto(produto.token)}" 
+                        styleClass="item-marketplace" style="width: 160px; min-width: 100px; height: 290px;">
+                     <div class="item-marketplace-back" style="height: 160px;">
+                        <h:graphicImage value="#{produto.imagem64}" />
+                     </div>
+                     <div class="texto-item-marketplace">
+                        <h:outputText styleClass="item-marketplace-preco" value="#{produto.preco}" />
+                        <h:outputText styleClass="item-marketplace-nome" value="#{produto.nome}" />
+                        <h:outputText styleClass="item-marketplace-cidade" value="#{produto.cidade}" />
+                     </div>
+                  </h:commandLink>
+               </ui:repeat>
+         </div>
+      </h:form>
+      </h:panelGroup>
+   </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+   <script type="text/javascript">
+
+   let listProdutos = null;
+
+   $.ajax({
+
+       type: "GET",
+       url: "/rest/produto/map/" + "#{marketplaceCategoriaBean.cidadeLocalizacao eq null ? "sem-cidade" : marketplaceCategoriaBean.cidadeLocalizacao}",
+       headers: { 
+		'Accept': 'application/json',
+		'Content-Type': 'application/json' 
+	     },
+      data: null,
+      success: function(data) {
+    	  listProdutos = data;
+       }
+     });
+
+   const map = new maplibregl.Map({
+       container: 'map', // id do mapa
+       style: 'https://api.maptiler.com/maps/c19f1471-5c8a-449c-b2bf-a9e3e3d8509b/style.json?key=TJpiltKFXP4oPsI7q9T0',
+       center: [#{marketplaceCategoriaBean.longitude eq null ? '-50.5101178' : marketplaceCategoriaBean.longitude}, #{marketplaceCategoriaBean.latitude eq null ? '-15.5165219' : marketplaceCategoriaBean.latitude}], // posição inicial [lng, lat]
+       zoom: #{marketplaceCategoriaBean.zoom eq null ? '2' : marketplaceCategoriaBean.zoom}, // zoom inicial
+/*        maxBounds: bounds //limitar área do mapa*/
+   });
+
+   map.addControl(new maplibregl.NavigationControl(), 'top-left');
+
+   var markers = [];
+   
+   function loadMapItems() {
+	   listProdutos.forEach(function(i) {
+		var el = document.createElement('div');
+
+	  var marker = new maplibregl.Marker(el)
+         .setLngLat([i.longitude, i.latitude])
+         .addTo(map);
+
+	   el.innerHTML = '<p name="marker" class="marker-map">' + i.preco + '</p>';
+
+	      var popup = new maplibregl.Popup({ offset: 25 })
+            .setHTML(
+	    	   `<a href="/marketplace/item/` + i.token + `" class="popup-produto">
+                  <div class="popup-imagem" style="background-image: url(` + i.imagem64 + `);"></div>
+                  <div class="popup-info">
+                     <h3 class="item-marketplace-preco">` + i.preco + `</h3>
+                     <p class="item-marketplace-cidade">` + i.cidade + ` </p>
+                  </div>
+               </a>`
+	     );
+
+           marker.setPopup(popup);
+           
+            markers.push(marker);
+            
+		});
+   }
+
+   function removedMarker() {
+	  if(map.boxZoom._map.style.z &lt; 11) {
+            markers.forEach((marker) => marker.remove());
+
+            var el = document.createElement('div');
+
+  	      el.innerHTML = '<p name="marker" class="marker-map-size">' + #{marketplaceCategoriaBean.produtos.size()} + '</p>';
+            
+  	    var markerUnique = new maplibregl.Marker(el)
+            .setLngLat([#{marketplaceCategoriaBean.longitude eq null ? '-50.5101178' : marketplaceCategoriaBean.longitude}, #{marketplaceCategoriaBean.latitude eq null ? '-15.5165219' : marketplaceCategoriaBean.latitude}])
+            .addTo(map);
+  	    markers.push(markerUnique);
+            /* console.log(map.boxZoom._map.style.z); */
+        } else {
+        	markers.forEach((marker) => marker.remove());
+        	loadMapItems();
+        }
+   }
+
+   document.getElementById('map').addEventListener('mousewheel', (event)=>{
+	   removedMarker();
+   });
+
+
+   </script>
+   <div class="notificacao" id="notificacao">
+      <div class="notificacaoPerfil">
+         <img id="notificacaoImagem" />
+         <h2 id="notificacaoNome"></h2>
+      </div>
+      <small>Mensagem: <span id="notificacaoMsg"></span></small>
+   </div>
+   <script src="/resources/js/chat.js"></script>
+</h:body>
+</html>

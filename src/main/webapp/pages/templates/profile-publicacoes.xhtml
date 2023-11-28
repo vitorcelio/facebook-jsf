@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<head>
+<style>
+.sumir {
+	display: none !important;
+}
+
+</style>
+</head>
+<h:body>
+   <h:form styleClass="apresentacao" id="apresentacaoInfoPerfil">
+      <div class="apresentacao-header">
+         <h1>Apresentação</h1>
+         <h:outputText value="#{profileBean.usuario.biografia}" styleClass="apresentacao-sobre" />
+      </div>
+      <ul>
+         <li class="item-apresentacao #{profileBean.usuario.empresaQueTrabalha eq null or profileBean.usuario.empresaQueTrabalha eq '' ? 'sumir' : null}">
+            <i class="bi bi-briefcase-fill"></i>
+            <p>
+               Trabalha na empresa
+               <h:outputText value="#{profileBean.usuario.empresaQueTrabalha}" />
+            </p>
+         </li>
+         <li class="item-apresentacao #{profileBean.usuario.escolaQueFrequentou eq null or profileBean.usuario.escolaQueFrequentou eq '' ? 'sumir' : null}">
+            <i class="bi bi-mortarboard-fill"></i>
+            <p>
+               Frequentou
+               <h:outputText value="#{profileBean.usuario.escolaQueFrequentou}" />
+            </p>
+         </li>
+         <li class="item-apresentacao #{profileBean.usuario.cidadeQueMora eq null or profileBean.usuario.cidadeQueMora eq '' ? 'sumir' : null}">
+            <i class="bi bi-house-door-fill"></i>
+            <p>
+               Mora em
+               <h:outputText value="#{profileBean.usuario.cidadeQueMora}" />
+            </p>
+         </li>
+         <li class="item-apresentacao #{profileBean.usuario.cidadeQueNasceu eq null or profileBean.usuario.cidadeQueNasceu eq '' ? 'sumir' : null}">
+            <i class="bi bi-geo-alt-fill"></i>
+            <p>
+               De
+               <h:outputText value="#{profileBean.usuario.cidadeQueNasceu}" />
+            </p>
+         </li>
+         <li class="item-apresentacao #{profileBean.usuario.dataQueEntrou eq null or profileBean.usuario.dataQueEntrou eq '' ? 'sumir' : null}">
+            <i class="bi bi-clock-fill"></i>
+            <p>
+               Entrou em
+               <h:outputText value="#{profileBean.usuario.dataQueEntrou}" />
+            </p>
+         </li>
+         <li class="item-apresentacao #{profileBean.usuario.estaEmRelacionamento eq false ? 'sumir' : null}">
+            <i class="bi bi-heart-fill"></i>
+            <p>
+               <h:outputText value="#{profileBean.usuario.estaCasado ? 'Casado com ' : 'Namorando com '  } #{profileBean.usuario.relacionamentoCom}"
+                  rendered="#{profileBean.usuario.estaEmRelacionamento}" />
+            </p>
+         </li>
+         <li class="item-apresentacao #{profileBean.usuario.instagram eq null or profileBean.usuario.instagram eq '' ? 'sumir' : null}">
+            <i class="bi bi-instagram"></i>
+            <p>
+               <h:commandLink value="#{profileBean.usuario.instagram}" action="#{profileBean.redirecionarInstagram(profileBean.usuario.instagram)}" target="_blank" />
+            </p>
+         </li>
+      </ul>
+   </h:form>
+   <div class="main-centro" id="postsPerfil" style="margin-top: 0px;">
+      <h:form id="publicar" styleClass="main-post" rendered="#{profileBean.usuarioLogado.username eq profileBean.usuario.username}">
+         <div class="main-post-pensamento">
+            <h:graphicImage value="#{profileBean.usuarioLogado.fotoMiniatura != null ? profileBean.usuarioLogado.fotoMiniatura : '/resources/img/sem-perfil.png' }" width="40" height="40"
+               style="object-fit: cover" />
+            <input id="botaoPublicar" type="button" value="No que você está pensando, #{profileBean.usuarioLogado.nome}?" />
+         </div>
+         <div id="botaoPublicar2" class="botao-post">
+            <i class="bi bi-file-image"></i>
+            <h:outputText value="Foto" />
+         </div>
+      </h:form>
+
+      <div id="publicarBody" class="page-publicar sumir #{profileBean.usuarioLogado.username eq profileBean.usuario.username ? null : 'sumir'}">
+         <h:form id="main-publicar" styleClass="main-publicar" enctype="multipart/form-data">
+            <h:inputHidden value="#{profileBean.usuarioLogado.id}" id="idUsuario" />
+            <div class="publica-header">
+               <h:outputLabel />
+               <h:outputText value="Criar publicação" />
+               <i id="fecharPublicacao" onclick="abrirPublicar()" class="bi bi-x-lg"></i>
+            </div>
+            <div class="publicar-body">
+               <h:graphicImage value="#{profileBean.usuarioLogado.fotoMiniatura != null ? profileBean.usuarioLogado.fotoMiniatura : '/resources/img/sem-perfil.png' }" width="40" height="40"
+                  style="object-fit: cover" />
+               <h:outputText value="#{profileBean.usuarioLogado.nome}" />
+            </div>
+            <h:inputTextarea value="#{profileBean.formPublic.descricao}" styleClass="input-area" pt:placeholder="No que você está pensando, #{profileBean.usuarioLogado.nome}?" rows="3" />
+            <div class="foto-publicar">
+               <h:outputLabel for="publicar-foto" styleClass="label-publicar">
+                  <i class="bi bi-images" id="p1"></i>
+                  <p id="p2">Adicionar foto</p>
+                  <img src="" id="imagem-pre" class="sumir" style="width: 100%; height: 100%; object-fit: contain" />
+               </h:outputLabel>
+               <h:inputFile accept=".gif,.png,.jpg,.jpeg" onchange="file()" value="#{profileBean.formPublic.imagem}" id="publicar-foto" name="publicar-foto" style="display: none" />
+            </div>
+            <h:commandButton action="#{profileBean.toPublicacao()}" value="Publicar" styleClass="botaoPublicar">
+            </h:commandButton>
+         </h:form>
+      </div>
+      <h:panelGroup layout="block" id="partPrincipalPublicacao">
+      <ui:repeat id="publicacoesList" value="#{profileBean.publicacoes}" var="publicacao" varStatus="idPublicacao">
+         <h:form id="publicacao" style="background-color: #242526;border-radius: 8px;margin-bottom: 10px">
+
+            <div class="post-header">
+               <div class="post-header-esquerda">
+                  <h:graphicImage value="#{publicacao.usuario.fotoMiniatura ne null ? publicacao.usuario.fotoMiniatura : '/resources/img/sem-perfil.png'}" width="40" height="40" />
+                  <div class="post-header-info">
+                     <p>
+                        <h:outputText value="#{publicacao.usuario.nome}" />
+                     </p>
+                     <p>
+                        <h:outputText value="#{publicacao.dataPublicacao}" />
+                     </p>
+                  </div>
+               </div>
+               <div onclick="sumirSalvo(#{idPublicacao.index})" class="post-header-direita">
+                  <i class="bi bi-three-dots"></i>
+               </div>
+               <h:panelGroup id="salvar-post" styleClass="salvar-post sumir">
+                  <h:commandLink layout="block" styleClass="item-salvar-post">
+                     <i class="bi bi-bookmark"></i>
+                     <div class="post-header-salvar">
+                        <p class="texto-salvar">
+                           <h:outputText value="Salvar Publicação" />
+                        </p>
+                        <p>
+                           <h:outputText value="Adicione isso aos seus itens salvos." />
+                        </p>
+                     </div>
+                  </h:commandLink>
+
+                  <h:commandLink layout="block" styleClass="item-salvar-post">
+                     <i class="bi bi-trash3"></i>
+                     <div class="post-header-salvar">
+                        <p class="texto-salvar">
+                           <h:outputText value="Mover para a Lixeira" />
+                        </p>
+                        <p>
+                           <h:outputText value="Os itens na Lixeira são excluídos permanentemente." />
+                        </p>
+                     </div>
+                  </h:commandLink>
+               </h:panelGroup>
+            </div>
+
+            <div class="ordens-publi">
+               <h2 class="comentario-post #{publicacao.criacaoConta ? 'ordem2' : null}">
+                  <h:outputText value="#{publicacao.descricao}" />
+               </h2>
+               <h:graphicImage value="#{publicacao.imagemBase64}" width="100%" />
+            </div>
+
+
+            <h:panelGroup layout="block" styleClass="post-numeros" id="post-numeros">
+               <div class="numeros-curtidas">
+                  <h:graphicImage width="20" library="img" name="curtida.svg" />
+                  <h:outputText id="numeroCurtidas" value="#{publicacao.ncurtidas}" />
+               </div>
+               <h:outputText value="#{publicacao.ncomentarios} comentários" styleClass="" />
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" id="footer" styleClass="post-footer">
+                <div id="botao-curtir#{publicacao.id}" onclick="curtir(#{publicacao.id}, #{idPublicacao.index})" class="botao-post #{profileBean.verificaCurtida(publicacao.id) eq true ? 'botao-post-curtido' : null}">
+                     <i class="bi #{profileBean.verificaCurtida(publicacao.id) eq true ? 'bi-hand-thumbs-up-fill' : 'bi-hand-thumbs-up'}" id="icone-curtir#{publicacao.id}"></i>
+                     <h:outputText value="Curtir" />
+                     <f:ajax event="click" execute="@this" render="@this footer" />
+                  </div>
+               <div onclick="mostrarComentario(#{idPublicacao.index})" class="botao-post">
+                  <i class="bi bi-chat-left"></i>
+                  <h:outputText value="Comentar" />
+               </div>
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" id="comentarios-respostas" styleClass="post-comentarios sumir">
+               <div id="comentar" class="comentar">
+                  <h:graphicImage value="#{profileBean.usuarioLogado.fotoMiniatura ne null ? profileBean.usuarioLogado.fotoMiniatura : '/resources/img/sem-perfil.png'}" width="35" height="35"
+                     style="object-fit: cover" />
+                  <div class="input-grupo-comentario">
+                     <h:inputText styleClass="input-comentario" pt:placeholder="Escreva um comentário..." value="#{profileBean.formComen.texto}" required="true" id="inputComentario">
+                        <f:ajax event="click" render="comentarios-atualizados post-numeros" />
+                     </h:inputText>
+                     <h:panelGroup onclick="comentar(#{publicacao.id}, #{idPublicacao.index})" type="button" styleClass="botao-comentario">
+                        <i class="bi bi-send"></i>
+                        <f:ajax event="click" execute="inputComentario @this" render="@this comentarios-atualizados post-numeros" />
+                     </h:panelGroup> 
+                  </div>
+               </div>
+               <h:panelGroup id="comentarios-atualizados">
+                  <ui:repeat value="#{publicacao.comentarios}" var="comentario">
+                     <h:form id="comentario" styleClass="comentarios">
+                        <div class="comentario">
+                           <h:graphicImage value="#{comentario.usuario.fotoMiniatura ne null ? comentario.usuario.fotoMiniatura : '/resources/img/sem-perfil.png'}" width="35" height="35"
+                              style="object-fit: cover" />
+                           <div class="comentario-info">
+                              <div class="comentario-mensagem">
+                                 <h:outputText value="#{comentario.usuario.nome}" styleClass="comentario-perfil" />
+                                 <p class="quebra">
+                                    <h:outputText value="#{comentario.texto}" />
+                                 </p>
+                              </div>
+                              <div class="comentario-info-botao">
+                                 <h:commandButton type="button" value="Responder" onclick="mostrarRespotas(#{comentario.id})" />
+                                 <h:outputText value="#{comentario.dataPublicacao}" />
+                              </div>
+                           </div>
+                        </div>
+                        <div id="respostas#{comentario.id}" class="respostas sumir">
+                           <ui:repeat value="#{comentario.respostas}" var="resposta">
+                              <div class="resposta-comentario">
+                                 <h:graphicImage value="#{resposta.usuario.fotoMiniatura ne null ? resposta.usuario.fotoMiniatura : '/resources/img/sem-perfil.png'}" width="35" height="35"
+                                    style="object-fit: cover" />
+                                 <div class="comentario-mensagem">
+                                    <h:outputText value="#{resposta.usuario.nome}" styleClass="comentario-perfil" />
+                                    <p class="quebra">
+                                       <h:outputText value="#{resposta.texto}"/>
+                                    </p>
+                                 </div>
+                              </div>
+                           </ui:repeat>
+                           <div id="comentar-resposta" class="comentar">
+                              <h:graphicImage value="#{profileBean.usuarioLogado.fotoMiniatura ne null ? profileBean.usuarioLogado.fotoMiniatura : '/resources/img/sem-perfil.png'}" width="35" height="35"
+                                 style="object-fit: cover" />
+                              <div class="input-grupo-comentario">
+                                 <h:inputText id="respostaAGORA" styleClass="input-comentario"
+                                    pt:placeholder="Responder a #{comentario.usuario.username eq profileBean.usuarioLogado.username ? 'você' : comentario.usuario.nome}..." />
+                                 <h:commandLink styleClass="botao-comentario">
+                                    <i class="bi bi-send"></i>
+                                 </h:commandLink>
+                              </div>
+                           </div>
+                        </div>
+                     </h:form>
+                  </ui:repeat>
+               </h:panelGroup>
+            </h:panelGroup>
+         </h:form>
+      </ui:repeat>
+      </h:panelGroup>
+      <h:commandButton action="#{profileBean.aumentarPublicacao(5)}" id="botaoCarregar" styleClass="sumir">
+         <f:ajax execute="@this" render="partPrincipalPublicacao" event="click" />
+      </h:commandButton>
+      <h:panelGroup onclick="carregarMaisPublicacoes()" styleClass="carregarMais" id="carregarMais">
+         <i class="bi bi-arrow-clockwise"></i>
+         <h:outputText value="Carregar mais" />
+      </h:panelGroup>
+      <h:panelGroup styleClass="sumir imagemCarregar" id="facebookLoading">
+         <h:graphicImage library="img" name="facebook-loading.gif" styleClass=" imagemCarregar"  width="70"/>
+       </h:panelGroup>
+   </div>
+</h:body>
+</html>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+   xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+   <title>Facebook Marketplace | Facebook</title>
+   <link rel="icon" type="image/x-icon" href="https://static.xx.fbcdn.net/rsrc.php/yD/r/d4ZIVX-5C-b.ico" />
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
+   <link rel="StyleSheet" href="/resources/css/default.css" />
+   <link rel="StyleSheet" href="/resources/css/menu.css" />
+   <link rel="StyleSheet" href="/resources/css/home.css" />
+   <link rel="StyleSheet" href="/resources/css/marketplace.css" />
+   <script src="https://cdn.maptiler.com/maplibre-gl-js/v2.2.0-pre.2/maplibre-gl.js"></script>
+   <link href="https://cdn.maptiler.com/maplibre-gl-js/v2.2.0-pre.2/maplibre-gl.css" rel="stylesheet" />
+</h:head>
+<h:body>
+   <ui:include src="/pages/templates/menu.xhtml" />
+   <div class="main">
+      <div class="amigos">
+         <h:form id="frm" styleClass="menu-amigos">
+            <div class="menu-amigos-header">
+               <div class="menu-amigos-header-cima">
+                  <h1>Marketplace</h1>
+                  <i class="bi bi-gear-fill"></i>
+               </div>
+               <div class="menu-input-grupo-marketplace">
+                  <i class="bi bi-search"></i>
+                  <h:inputText pt:placeholder="Pesquisar no Marketplace" />
+               </div>
+            </div>
+            <ui:include src="/pages/templates/menu-marketplace.xhtml">
+               <ui:param name="cidade" value="#{marketplaceBean.cidadeLocalizacao}" />
+               <ui:param name="lonlat" value="#{marketplaceBean.lonlat}" />
+               <ui:param name="longitude" value="#{marketplaceBean.longitude eq null ? '-50.5101178' : marketplaceBean.longitude}" />
+               <ui:param name="latitude" value="#{marketplaceBean.latitude eq null ? '-15.5165219' : marketplaceBean.latitude}" />
+               <ui:param name="lonlatList" value="#{marketplaceBean.lonlatList}" />
+               <ui:param name="actionBean" value="#{marketplaceBean}" />
+               <ui:param name="actionMethod" value="carregarListLonLatCidadeQuery" />
+               <ui:param name="actionLonLat" value="selectLonlat" />
+               <ui:param name="actionResetLonlat" value="resetLonlat" />
+               <ui:param name="zoom" value="#{marketplaceBean.zoom eq null ? '2' : marketplaceBean.zoom}" />
+            </ui:include>
+         </h:form>
+      </div>
+       <h:panelGroup layout="block" id="sem-produtos" styleClass="body-solicitacoes #{marketplaceBean.produtos.size() ne 0 ? 'sumir' : ''}">
+         <h:graphicImage value="/resources/img/sem-produto.svg" width="120" />
+         <h1 style="width: 320px; text-align: center;">Não há produtos em sua área no momento. Verifique novamente mais tarde.</h1>
+      </h:panelGroup>
+      <div class="body-pessoas  #{marketplaceBean.produtos.size() eq 0 ? 'sumir' : ''}">
+         <h:form>
+            <div class="body-pessoas-header">
+               <h1>Seleções de hoje</h1>
+               <h:commandLink value="#{marketplaceBean.cidadeLocalizacao != null ? marketplaceBean.cidadeLocalizacao : 'Brasil'}" />
+            </div>
+            <div class="pessoas-perfis">
+               <ui:repeat var="produto" value="#{marketplaceBean.produtos}">
+                  <h:commandLink action="#{marketplaceBean.redirectProduto(produto.token)}" styleClass="item-marketplace">
+                     <div class="item-marketplace-back">
+                        <h:graphicImage value="#{produto.imagem64}" />
+                     </div>
+                     <div class="texto-item-marketplace">
+                        <h:outputText styleClass="item-marketplace-preco" value="#{produto.preco}" />
+                        <h:outputText styleClass="item-marketplace-nome" value="#{produto.nome}" />
+                        <h:outputText styleClass="item-marketplace-cidade" value="#{produto.cidade}" />
+                     </div>
+                  </h:commandLink>
+               </ui:repeat>
+            </div>
+         </h:form>
+      </div>
+   </div>
+      <div class="notificacao" id="notificacao">
+      <div class="notificacaoPerfil">
+         <img id="notificacaoImagem" />
+         <h2 id="notificacaoNome"></h2>
+      </div>
+      <small>Mensagem: <span id="notificacaoMsg"></span></small>
+   </div>
+   <script src="/resources/js/chat.js"></script>
+</h:body>
+</html>
